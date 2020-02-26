@@ -14,6 +14,9 @@ namespace AdvertismentPlatform.Models
             
         }
 
+        public DbSet<ItemCategory> Items;
+        public DbSet<Advertisment> advertisments;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // use TBH strategy to map the following models
@@ -21,7 +24,7 @@ namespace AdvertismentPlatform.Models
                 .HasDiscriminator(it => it.ItemType)
                 .HasValue<AutoItem>("auto_item");
 
-            // Biderectional One to Many relationship
+            // Biderectional One to Many relationship between ItemCategory items and Advertisment
             modelBuilder.Entity<Advertisment>()
                 .HasOne(a => a.Item)
                 .WithOne(it => it.Advertisment)

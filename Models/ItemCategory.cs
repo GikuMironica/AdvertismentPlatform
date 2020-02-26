@@ -6,7 +6,8 @@ namespace AdvertismentPlatform.Models
     [Table("items")]
     public abstract class ItemCategory
     {
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public double? Price { get; set; }
 

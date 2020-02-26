@@ -10,7 +10,8 @@ namespace AdvertismentPlatform.Models
     [Table("advertisments")]
     public class Advertisment
     {
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [MaxLength(50)]
         public string Title { get; set; }
