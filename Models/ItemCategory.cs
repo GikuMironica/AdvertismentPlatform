@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdvertismentPlatform.Models
@@ -11,6 +12,7 @@ namespace AdvertismentPlatform.Models
         public int Id { get; set; }
         public double? Price { get; set; }
 
+        #nullable enable
         [MaxLength(50)]
         public string? Brand { get; set; }
 
@@ -21,6 +23,12 @@ namespace AdvertismentPlatform.Models
 
         public int AdvertismentId { get; set; }
         public Advertisment Advertisment { get; set; }
-        //public abstract string ItemType { get; set; }
+
+        [Display(Name = "Production year")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? ProductAge { get; set; }
+
+        [StringLength(7)]
+        public int? Mileage { get; set; }
     }
 }

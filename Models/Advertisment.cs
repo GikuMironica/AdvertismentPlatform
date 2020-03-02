@@ -15,6 +15,8 @@ namespace AdvertismentPlatform.Models
         public int Id { get; set; }
         [MaxLength(50)]
         public string Title { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd hh-mm}", ApplyFormatInEditMode = true)]
         public DateTime PostDate { get; set; }
 
         public string? Picture { get; set; }

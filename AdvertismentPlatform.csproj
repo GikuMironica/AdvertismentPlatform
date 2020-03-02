@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200229161959_ModelRemap.cs" />
     <Compile Remove="Migrations\20200229161959_ModelRemap.Designer.cs" />
+    <Compile Remove="Migrations\20200302113857_UpdateModel.cs" />
+    <Compile Remove="Migrations\20200302113857_UpdateModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

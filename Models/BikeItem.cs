@@ -8,15 +8,9 @@ using System.Threading.Tasks;
 namespace AdvertismentPlatform.Models
 {
     [Table("items")]
-    public class AutoItem : ItemCategory
+    public class BikeItem : ItemCategory
     {
-        [StringLength(2)]
-        public int? Doors { get; set; }
-
-        [MaxLength(2)]
-        public string? Car_Type { get; set; }
-
-        [StringLength(2)]
-        public int? Seats { get; set; }
+        [StringLength(3)]
+        public int? TopSpeed { get; set; }
     }
 }

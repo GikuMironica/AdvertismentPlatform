@@ -16,7 +16,8 @@ namespace AdvertismentPlatform.Models
 
         public DbSet<ItemCategory> Items { get; set; }
         public DbSet<AutoItem> AutoItems { get; set; }
-        public DbSet<Advertisment> advertisments { get; set;
+        public DbSet<BikeItem> BikeItems { get; set; }
+        public DbSet<Advertisment> Advertisments { get; set;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,7 +26,8 @@ namespace AdvertismentPlatform.Models
             modelBuilder.Entity<ItemCategory>()
                 .ToTable("items")
                 .HasDiscriminator<string>("item_type")
-                .HasValue<AutoItem>("auto_type");
+                .HasValue<AutoItem>("auto_type")
+                .HasValue<BikeItem>("bike_type");
 
             modelBuilder.Entity<Advertisment>()
                 .ToTable("advertisments");

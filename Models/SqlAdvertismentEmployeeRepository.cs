@@ -17,7 +17,7 @@ namespace AdvertismentPlatform.Models
         }
         public async Task Add(Advertisment advertisment)
         {
-            context.advertisments.Add(advertisment);
+            context.Advertisments.Add(advertisment);
 
             await context.SaveChangesAsync();
            
@@ -25,10 +25,10 @@ namespace AdvertismentPlatform.Models
 
         public async Task Delete(int Id)
         {
-            Advertisment ad = await context.advertisments.FindAsync(Id);
+            Advertisment ad = await context.Advertisments.FindAsync(Id);
             if(ad != null)
             {
-                context.advertisments.Remove(ad);
+                context.Advertisments.Remove(ad);
                 await context.SaveChangesAsync();
             }
             
@@ -36,19 +36,20 @@ namespace AdvertismentPlatform.Models
         
         public async Task<Advertisment> GetAdvertisment(int Id)
         {
-            return await context.advertisments
+            return await context.Advertisments
                 .Include(a => a.Item)
                 .SingleOrDefaultAsync(s => s.Id == Id);
         }
 
         public async Task<IEnumerable<Advertisment>> GetAdvertisments()
         {
-            return context.advertisments;
+            return context.Advertisments
+                .Include(ad => ad.Item);
         }
 
         public async Task Update(Advertisment advertisment)
         {
-            var ad = context.advertisments.Attach(advertisment);
+            var ad = context.Advertisments.Attach(advertisment);
             ad.State = EntityState.Modified;
             await context.SaveChangesAsync();
         }

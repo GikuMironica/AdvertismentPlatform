@@ -29,26 +29,8 @@ namespace AdvertismentPlatform.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            //  var it = await itemRepository.GetItem(1);
-            var ad = await advertismentRepository.GetAdvertisment(1);
-
-            var advertise = new Advertisment()
-            {
-                Title = "NewAD",
-                Picture = "NewPic",
-                PostDate = DateTime.UtcNow,
-                Item = new AutoItem()
-                {
-                    Brand = "BewBrandd",
-                    Description = "NEW description",
-                    Mileage = 99,
-                    ProductAge = DateTime.UtcNow,
-                    Price = 1000
-                }
-            };
-            await advertismentRepository.Add(advertise);
-
-            return View(ad);
+            
+            return View();
         }
 
         public IActionResult Privacy()
