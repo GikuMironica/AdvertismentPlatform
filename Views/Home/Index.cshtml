@@ -1,7 +1,9 @@
-﻿@{
+﻿
+@model Advertisment
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="text-center">
- 
+ <h1>@Model.Id  @(((AutoItem)(Model.Item)).Description)</h1>
 </div>

@@ -19,17 +19,17 @@ namespace AdvertismentPlatform.Models
             if(item is AutoItem)
             {
                 AutoItem autoItem = (AutoItem)item;
-                context.Items.Add(autoItem);
+                context.AutoItems.Add(autoItem);
                 await context.SaveChangesAsync();
             }
         }
 
         public async Task Delete(int Id)
         {
-            var item = await context.Items.FindAsync(Id);
+            var item = await context.AutoItems.FindAsync(Id);
             if( item != null)
             {
-                context.Items.Remove(item);
+                context.AutoItems.Remove(item);
                 await context.SaveChangesAsync();
             }
            
@@ -37,7 +37,7 @@ namespace AdvertismentPlatform.Models
 
         public async Task<ItemCategory> GetItem(int Id)
         {
-            var item = await context.Items.FindAsync(Id);
+            var item = await context.AutoItems.FindAsync(Id);
             if(item is AutoItem)
             {
                 return (AutoItem)item;
@@ -48,12 +48,12 @@ namespace AdvertismentPlatform.Models
 
         public async Task<IEnumerable<ItemCategory>> GetItems()
         {
-            return context.Items.Where(it => (it is AutoItem));
+            return context.AutoItems.Where(it => (it is AutoItem));
         }
 
-        public async Task Update(ItemCategory itemChanged)
+        public async Task Update(AutoItem itemChanged)
         {
-            var item = context.Items.Add(itemChanged);
+            var item = await context.AutoItems.AddAsync(itemChanged);
             item.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             await context.SaveChangesAsync();
         }

@@ -8,27 +8,34 @@ namespace AdvertismentPlatform.Models
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) 
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            
+
         }
 
-        public DbSet<ItemCategory> Items;
-        public DbSet<Advertisment> advertisments;
+        public DbSet<ItemCategory> Items { get; set; }
+        public DbSet<AutoItem> AutoItems { get; set; }
+        public DbSet<Advertisment> advertisments { get; set;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // use TBH strategy to map the following models
+            // Define the TPH using Fluent.API
             modelBuilder.Entity<ItemCategory>()
-                .HasDiscriminator(it => it.ItemType)
-                .HasValue<AutoItem>("auto_item");
+                .ToTable("items")
+                .HasDiscriminator<string>("item_type")
+                .HasValue<AutoItem>("auto_type");
 
-            // Biderectional One to Many relationship between ItemCategory items and Advertisment
             modelBuilder.Entity<Advertisment>()
-                .HasOne(a => a.Item)
-                .WithOne(it => it.Advertisment)
-                .HasForeignKey<ItemCategory>(it => it.AdvertismentID);
+                .ToTable("advertisments");
+
+            // One - to - One relationship between ItemCategory <-> Advertisment
+            modelBuilder.Entity<Advertisment>()
+                .HasOne(p => p.Item)
+                .WithOne(a => a.Advertisment)
+                .HasForeignKey<ItemCategory>(ic => ic.AdvertismentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

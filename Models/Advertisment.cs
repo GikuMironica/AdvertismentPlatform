@@ -19,7 +19,6 @@ namespace AdvertismentPlatform.Models
 
         public string? Picture { get; set; }
 
-        [Required]
         public ItemCategory Item { get; set; }
     }
 }

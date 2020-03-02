@@ -30,7 +30,10 @@ namespace AdvertismentPlatform
             services.AddControllersWithViews();
 
             services.AddDbContextPool<AppDbContext>(options =>
-               options.UseMySql(Configuration.GetConnectionString("advertismentplatform")));
+               options.UseMySql(Configuration.GetConnectionString("adplatform")));
+
+            services.AddScoped<IitemRepository, SqlAutoItemRepository>();
+            services.AddScoped<IAdvertismentRepository, SqlAdvertismentEmployeeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

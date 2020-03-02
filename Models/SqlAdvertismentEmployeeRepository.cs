@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace AdvertismentPlatform.Models
         public async Task Add(Advertisment advertisment)
         {
             context.advertisments.Add(advertisment);
+
             await context.SaveChangesAsync();
            
         }
@@ -31,10 +33,12 @@ namespace AdvertismentPlatform.Models
             }
             
         }
-
+        
         public async Task<Advertisment> GetAdvertisment(int Id)
         {
-            return await context.advertisments.FindAsync(Id);
+            return await context.advertisments
+                .Include(a => a.Item)
+                .SingleOrDefaultAsync(s => s.Id == Id);
         }
 
         public async Task<IEnumerable<Advertisment>> GetAdvertisments()
@@ -45,7 +49,7 @@ namespace AdvertismentPlatform.Models
         public async Task Update(Advertisment advertisment)
         {
             var ad = context.advertisments.Attach(advertisment);
-            ad.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            ad.State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
     }

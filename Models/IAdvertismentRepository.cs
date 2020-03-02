@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdvertismentPlatform.Models
 {
-    interface IAdvertismentRepository
+    public interface IAdvertismentRepository
     {
         public Task<Advertisment> GetAdvertisment(int Id);
         public Task<IEnumerable<Advertisment>> GetAdvertisments();
