@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace AdvertismentPlatform.Models
 
         private readonly AppDbContext context;
 
-        public SqlAdvertismentEmployeeRepository(AppDbContext context)
+        public SqlAdvertismentEmployeeRepository(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
         }
@@ -36,15 +37,18 @@ namespace AdvertismentPlatform.Models
         
         public async Task<Advertisment> GetAdvertisment(int Id)
         {
+            // include also the IdentityUser
             return await context.Advertisments
-                .Include(a => a.Item)
+                .Include(advertisment => advertisment.Item)
+                .Include(advertisment => advertisment.ApplicationUser)
                 .SingleOrDefaultAsync(s => s.Id == Id);
         }
 
         public async Task<IEnumerable<Advertisment>> GetAdvertisments()
         {
-            return context.Advertisments
-                .Include(ad => ad.Item);
+            return await context.Advertisments
+                .Include(ad => ad.Item)
+                .ToListAsync();
         }
 
         public async Task Update(Advertisment advertisment)
