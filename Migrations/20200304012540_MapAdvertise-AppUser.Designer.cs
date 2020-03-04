@@ -3,14 +3,16 @@ using System;
 using AdvertismentPlatform.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdvertismentPlatform.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200304012540_MapAdvertise-AppUser")]
+    partial class MapAdvertiseAppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -340,8 +342,7 @@ namespace AdvertismentPlatform.Migrations
                 {
                     b.HasOne("AdvertismentPlatform.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Advertisments")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("AdvertismentPlatform.Models.ItemCategory", b =>

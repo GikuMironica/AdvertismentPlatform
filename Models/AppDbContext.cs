@@ -18,8 +18,8 @@ namespace AdvertismentPlatform.Models
         public DbSet<ItemCategory> Items { get; set; }
         public DbSet<AutoItem> AutoItems { get; set; }
         public DbSet<BikeItem> BikeItems { get; set; }
-        public DbSet<Advertisment> Advertisments { get; set;
-        }
+        public DbSet<Advertisment> Advertisments { get; set;}
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,8 +33,14 @@ namespace AdvertismentPlatform.Models
                 .HasValue<AutoItem>("auto_type")
                 .HasValue<BikeItem>("bike_type");
 
+
+            // One - to Many relationship between application user <-> Advertisment
             modelBuilder.Entity<Advertisment>()
-                .ToTable("advertisments");
+                .ToTable("advertisments")
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(ap => ap.Advertisments)
+                .HasForeignKey(a => a.ApplicationUserId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // One - to - One relationship between ItemCategory <-> Advertisment
             modelBuilder.Entity<Advertisment>()
@@ -42,6 +48,9 @@ namespace AdvertismentPlatform.Models
                 .WithOne(a => a.Advertisment)
                 .HasForeignKey<ItemCategory>(ic => ic.AdvertismentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+          
+                
 
         }
     }

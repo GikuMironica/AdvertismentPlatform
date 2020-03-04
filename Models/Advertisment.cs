@@ -22,5 +22,9 @@ namespace AdvertismentPlatform.Models
         public string? Picture { get; set; }
 
         public ItemCategory Item { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
+
+        public string ApplicationUserId { get; set; }
     }
 }

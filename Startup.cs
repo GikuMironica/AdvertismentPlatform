@@ -35,7 +35,7 @@ namespace AdvertismentPlatform
             services.AddDbContextPool<AppDbContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("adplatform")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IitemRepository, SqlAutoItemRepository>();
