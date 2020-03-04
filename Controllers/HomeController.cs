@@ -6,28 +6,34 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AdvertismentPlatform.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdvertismentPlatform.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAdvertismentRepository advertismentRepository;
+        private readonly IitemRepository iitemRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, 
+            IAdvertismentRepository advertismentRepository,
+            IitemRepository iitemRepository)
         {
             _logger = logger;
+            this.advertismentRepository = advertismentRepository;
+            this.iitemRepository = iitemRepository;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
         {
+            
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
