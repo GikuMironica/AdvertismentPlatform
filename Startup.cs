@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using AdvertismentPlatform.Models.MySqlRepository;
 
 namespace AdvertismentPlatform
 {
@@ -38,8 +39,11 @@ namespace AdvertismentPlatform
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddScoped<IitemRepository, SqlAutoItemRepository>();
-            services.AddScoped<IAdvertismentRepository, SqlAdvertismentEmployeeRepository>();
+            
+            services.AddScoped<IItemRepository<ItemCategory>, BaseItemRepository>();
+            services.AddScoped<IAutoItemRepository, AutoRepository>();
+            services.AddScoped<IBikeItemRepository, BikeRepository>();
+            services.AddScoped<IAdvertismentRepository, AdvertismentRepository>();
         }
 
 
