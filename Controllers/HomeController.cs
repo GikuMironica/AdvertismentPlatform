@@ -15,17 +15,14 @@ namespace AdvertismentPlatform.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAdvertismentRepository advertismentRepository;
-        private readonly IitemRepository iitemRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(ILogger<HomeController> logger, 
-            IAdvertismentRepository advertismentRepository,
-            IitemRepository iitemRepository,
+            IAdvertismentRepository advertismentRepository, 
             UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             this.advertismentRepository = advertismentRepository;
-            this.iitemRepository = iitemRepository;
             this.userManager = userManager;
         }
 
@@ -33,8 +30,8 @@ namespace AdvertismentPlatform.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-
-            /*    var advertise = await advertismentRepository.GetAdvertisment(2);
+            var advertise = await advertismentRepository.GetById(2);
+            /*    
               var user = new ApplicationUser
                {
                    UserName = "New",
