@@ -31,27 +31,11 @@ namespace AdvertismentPlatform.Controllers
         public async Task<IActionResult> Index()
         {
             var advertise = await advertismentRepository.GetById(2);
-            /*    
-              var user = new ApplicationUser
-               {
-                   UserName = "New",
-                   Email = "hahaha@gmai.com",
-                   City = "Chisinau"
-               };
-               var result = await userManager.CreateAsync(user, "Compot123!as");
-               if (result.Succeeded)
-               {
-                   //
-               }*/
+           
 
             return View();
         }
 
         
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
