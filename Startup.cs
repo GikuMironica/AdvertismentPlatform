@@ -53,9 +53,8 @@ namespace AdvertismentPlatform
                 })
                 .AddFacebook(options =>
                 {
-
-                    options.AppId = "196779774721813";
-                    options.AppSecret = "8e82fd46dd5cba07f61662339fdca441";
+                    options.AppId = "872704303179040";
+                    options.AppSecret = "e09b7365a46ec7b5f6c2fb4f1dc91b77";
                 });
 
             services.AddScoped<IItemRepository<ItemCategory>, BaseItemRepository>();
