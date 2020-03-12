@@ -19,7 +19,8 @@ namespace AdvertismentPlatform.Models
         public DbSet<AutoItem> AutoItems { get; set; }
         public DbSet<BikeItem> BikeItems { get; set; }
         public DbSet<Advertisment> Advertisments { get; set;}
-        
+
+            
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,9 +49,6 @@ namespace AdvertismentPlatform.Models
                 .WithOne(a => a.Advertisment)
                 .HasForeignKey<ItemCategory>(ic => ic.AdvertismentId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-          
-                
 
         }
     }

@@ -16,6 +16,6 @@ namespace AdvertismentPlatform.Models
         [StringLength(30)]
         public string LastName { get; set; }
 
-        public List<Advertisment> Advertisments { get; set; }
+        public List<Advertisment>? Advertisments { get; set; }
     }
 }
