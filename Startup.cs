@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using AdvertismentPlatform.Models.MySqlRepository;
 
 namespace AdvertismentPlatform
 {
@@ -35,11 +36,31 @@ namespace AdvertismentPlatform
             services.AddDbContextPool<AppDbContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("adplatform")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>( options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 3;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
-            services.AddScoped<IitemRepository, SqlAutoItemRepository>();
-            services.AddScoped<IAdvertismentRepository, SqlAdvertismentEmployeeRepository>();
+
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "824631466201-rsmg37ukppkgvr2i5d9r4tgjljpsc5gi.apps.googleusercontent.com";
+                    options.ClientSecret = "aaRirFRgJSIbJlkpYmWTYeix";
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = "872704303179040";
+                    options.AppSecret = "e09b7365a46ec7b5f6c2fb4f1dc91b77";
+                });
+
+            services.AddScoped<IItemRepository<ItemCategory>, BaseItemRepository>();
+            services.AddScoped<IAutoItemRepository, AutoRepository>();
+            services.AddScoped<IBikeItemRepository, BikeRepository>();
+            services.AddScoped<IAdvertismentRepository, AdvertismentRepository>();
         }
 
 

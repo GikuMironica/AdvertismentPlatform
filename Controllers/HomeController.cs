@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AdvertismentPlatform.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdvertismentPlatform.Controllers
 {
@@ -14,30 +15,27 @@ namespace AdvertismentPlatform.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAdvertismentRepository advertismentRepository;
-        private readonly IitemRepository iitemRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(ILogger<HomeController> logger, 
-            IAdvertismentRepository advertismentRepository,
-            IitemRepository iitemRepository)
+            IAdvertismentRepository advertismentRepository, 
+            UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             this.advertismentRepository = advertismentRepository;
-            this.iitemRepository = iitemRepository;
+            this.userManager = userManager;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            
+            var advertise = await advertismentRepository.GetById(2);
+           
+
             return View();
         }
 
         
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
