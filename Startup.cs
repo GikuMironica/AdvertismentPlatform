@@ -44,8 +44,20 @@ namespace AdvertismentPlatform
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            
-            
+
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "824631466201-rsmg37ukppkgvr2i5d9r4tgjljpsc5gi.apps.googleusercontent.com";
+                    options.ClientSecret = "aaRirFRgJSIbJlkpYmWTYeix";
+                })
+                .AddFacebook(options =>
+                {
+
+                    options.AppId = "196779774721813";
+                    options.AppSecret = "8e82fd46dd5cba07f61662339fdca441";
+                });
+
             services.AddScoped<IItemRepository<ItemCategory>, BaseItemRepository>();
             services.AddScoped<IAutoItemRepository, AutoRepository>();
             services.AddScoped<IBikeItemRepository, BikeRepository>();
