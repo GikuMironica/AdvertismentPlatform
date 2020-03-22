@@ -55,6 +55,10 @@ namespace AdvertismentPlatform.Controllers
 
                 if (result.Succeeded)
                 {
+                    if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "home");
                 }
@@ -155,7 +159,7 @@ namespace AdvertismentPlatform.Controllers
             return new ChallengeResult(provider, properties);
         }
 
-        [AllowAnonymous]
+        
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
