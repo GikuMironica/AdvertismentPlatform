@@ -24,6 +24,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
+                            @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Administration" asp-action="ListRoles">Manage Roles</a>
+                                </li>
+                            }
                         </ul>
                         <ul class="navbar-nav ml-auto">
                             @if (signInManager.IsSignedIn(User))

@@ -1,5 +1,6 @@
 ﻿using AdvertismentPlatform.Models;
 using AdvertismentPlatform.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace AdvertismentPlatform.Controllers
 {
+    [Authorize(Roles = "Admin, Super Admin")]
+    //[AllowAnonymous] allow anonymous access
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
