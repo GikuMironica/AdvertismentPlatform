@@ -27,6 +27,12 @@ namespace AdvertismentPlatform.Models
             // Keys of identity table are mapped in this method of base class
             base.OnModelCreating(modelBuilder);
 
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
             // Define the TPH using Fluent.API
             modelBuilder.Entity<ItemCategory>()
                 .ToTable("items")
