@@ -159,7 +159,7 @@ namespace AdvertismentPlatform.Controllers
             return new ChallengeResult(provider, properties);
         }
 
-        
+        [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
