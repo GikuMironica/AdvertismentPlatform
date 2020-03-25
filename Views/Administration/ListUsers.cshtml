@@ -23,9 +23,16 @@
                 <h5 class="card-title">@user.UserName</h5>
             </div>
             <div class="card-footer">
-                <a asp-action="EditUser" asp-controller="Administration"
-                   asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
-                <a href="#" class="btn btn-danger">Delete</a>
+                
+                @*Delete user done in a form in case of clicking a image in a malicious email
+                    whith the source attribute set like <img src="https://localhost/Administration/DeleteUser/123 /> 
+                    also search engines might delete it while indexing the page
+                    THATS WHY GET REQUEST ARE NOT USED FOR DELETING "*@
+                <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
+                    <a asp-action="EditUser" asp-controller="Administration"
+                       asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                    <button type="submit" href="#" class="btn btn-danger">Delete</button>
+                </form>
             </div>
         </div>
     }

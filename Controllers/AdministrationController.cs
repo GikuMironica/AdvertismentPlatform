@@ -24,6 +24,40 @@ namespace AdvertismentPlatform.Controllers
             this.userManager = userManager;
         }
 
+        /**
+         * This action method responds to the posted form,
+         * so it responds to HTTP post requests
+         * since changing the state of data must never be performed with
+         * Get requests
+         */
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                var result = await userManager.DeleteAsync(user);
+                
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View("ListUsers");
+            }
+
+
+        }
 
         [HttpGet]
         public IActionResult ListUsers()
