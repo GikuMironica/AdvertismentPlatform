@@ -22,23 +22,32 @@
                 <h5 class="card-title">@role.Name</h5>
             </div>
             <div class="card-footer">
-                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
-                    <a class="btn btn-primary" asp-action="EditRole"
-                       asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
+                @if (User.IsInRole("Super Admin"))
+                {
 
-                    @*Delete with a inline confirmation, no context switch *@
-                    <span id="confirmDeleteSpan_@role.Id" style="display:none">
-                        <span>Are you sure you want to delete?</span>
-                        <button type="submit" class="btn btn-danger">Yes</button>
-                        <a href="#" class="btn btn-primary"
-                           onclick="confirmDelete('@role.Id', false)">No</a>
-                    </span>
+                    <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                        <a class="btn btn-primary" asp-action="EditRole"
+                           asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
 
-                    <span id="deleteSpan_@role.Id">
-                        <a href="#" class="btn btn-danger"
-                           onclick="confirmDelete('@role.Id', true)">Delete</a>
-                    </span>
-                </form>
+                        @*Delete with a inline confirmation, no context switch *@
+                        <span id="confirmDeleteSpan_@role.Id" style="display:none">
+                            <span>Are you sure you want to delete?</span>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <a href="#" class="btn btn-primary"
+                               onclick="confirmDelete('@role.Id', false)">No</a>
+                        </span>
+
+                        <span id="deleteSpan_@role.Id">
+                            <a href="#" class="btn btn-danger"
+                               onclick="confirmDelete('@role.Id', true)">Delete</a>
+                        </span>
+
+                    </form>
+                }
+                else
+                {
+                    <p style="color:RED">No Access</p>
+                }
             </div>
         </div>
     }
