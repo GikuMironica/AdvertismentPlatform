@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using AdvertismentPlatform.Models.MySqlRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using AdvertismentPlatform.Security;
 
 namespace AdvertismentPlatform
 {
@@ -49,11 +50,12 @@ namespace AdvertismentPlatform
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 3;
-
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
                 options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
 
 
             services.AddAuthentication()
@@ -67,6 +69,12 @@ namespace AdvertismentPlatform
                     options.AppId = "872704303179040";
                     options.AppSecret = "e09b7365a46ec7b5f6c2fb4f1dc91b77";
                 });
+
+            // Change all token lifetime to 10h 
+            //services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(10));
+
+            // after creating custom TokenProvider for email confirmation, configure lifetime to 3 days
+            services.Configure<CustomEmailConfirmationTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromDays(3));
 
             services.AddScoped<IItemRepository<ItemCategory>, BaseItemRepository>();
             services.AddScoped<IAutoItemRepository, AutoRepository>();
