@@ -52,6 +52,8 @@ namespace AdvertismentPlatform
                 options.Password.RequiredUniqueChars = 3;
                 options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
                 options.SignIn.RequireConfirmedEmail = true;
+                options.Lockout.MaxFailedAccessAttempts = 4;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders()
