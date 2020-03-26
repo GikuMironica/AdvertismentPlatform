@@ -322,6 +322,55 @@ namespace AdvertismentPlatform.Controllers
             return View("Error");
         }
 
+        /**
+         * This action method returns the view of the forgot password view
+         */
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        /**
+         * HttpPost variation of the ForgotPassword action method,
+         * receives an instance of ForgotPasswordViewModel
+         */
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Find the user by email
+                var user = await userManager.FindByEmailAsync(model.Email);
+                // If the user is found AND Email is confirmed
+                if (user != null && await userManager.IsEmailConfirmedAsync(user))
+                {
+                    // Generate the reset password token
+                    var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Build the password reset link
+                    var passwordResetLink = Url.Action("ResetPassword", "Account",
+                            new { email = model.Email, token = token }, Request.Scheme);
+
+                    // Email to the user the reset password link
+                    EmailHandler emailHandler = new EmailHandler(configuration);
+                    var result = await emailHandler.SendEmail(model.Email, "Forgot Password", "Click the link below in order to reset your password\n" + passwordResetLink);
+
+                    return View("ForgotPasswordConfirmation");
+                    
+                }
+
+                // To avoid account enumeration and brute force attacks, don't
+                // reveal that the user does not exist or is not confirmed
+                return View("ForgotPasswordConfirmation");
+            }
+
+            return View(model);
+        }
+
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied()
