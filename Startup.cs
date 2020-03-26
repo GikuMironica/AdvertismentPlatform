@@ -44,7 +44,7 @@ namespace AdvertismentPlatform
 
             services.AddDbContextPool<AppDbContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("adplatform")));
-
+            
             services.AddIdentity<ApplicationUser, IdentityRole>( options =>
             {
                 options.Password.RequiredLength = 6;
@@ -72,6 +72,7 @@ namespace AdvertismentPlatform
             services.AddScoped<IAutoItemRepository, AutoRepository>();
             services.AddScoped<IBikeItemRepository, BikeRepository>();
             services.AddScoped<IAdvertismentRepository, AdvertismentRepository>();
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
 

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AdvertismentPlatform.Handlers;
 using AdvertismentPlatform.Models;
 using AdvertismentPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Configuration;
 
 namespace AdvertismentPlatform.Controllers
 {
@@ -16,6 +17,7 @@ namespace AdvertismentPlatform.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IConfiguration configuration;
 
         /**
          * Controller
@@ -24,10 +26,12 @@ namespace AdvertismentPlatform.Controllers
          *  SignInManager
          */
         public AccountController(UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManager)
+                                 SignInManager<ApplicationUser> signInManager,
+                                 IConfiguration configuration)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.configuration = configuration;
         }
         
         /**
@@ -66,10 +70,21 @@ namespace AdvertismentPlatform.Controllers
                         return RedirectToAction("ListUsers", "Administration");
                     }
 
-                    ViewBag.ErrorTitle = "Registration successful";
-                    ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
-                        "email, by clicking on the confirmation link we have emailed you " +
-                         confirmationLink;
+                   
+                     EmailHandler emailHandler = new EmailHandler(configuration);
+                        var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n"+confirmationLink);
+
+                    if (status)
+                    {
+                        ViewBag.ErrorTitle = "Registration successful";
+                        ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
+                            "email, by clicking on the confirmation link we have emailed you ";
+                    } else
+                    {
+                        ViewBag.ErrorTitle = "Registration failed";
+                        ViewBag.ErrorMessage = "The email you provided is invalid";
+                    }
+
                     return View("Error");
                 }
 
@@ -257,7 +272,10 @@ namespace AdvertismentPlatform.Controllers
 
                         ViewBag.ErrorTitle = "Registration successful";
                         ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
-                            "email, by clicking on the confirmation link we have emailed you \n " + confirmationLink;
+                            "email, by clicking on the confirmation link we have emailed you";
+
+                        EmailHandler emailHandler = new EmailHandler(configuration);
+                        var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n" + confirmationLink);
                         return View("Error");
                     }
 
