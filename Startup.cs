@@ -49,6 +49,8 @@ namespace AdvertismentPlatform
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 3;
+
+                options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
