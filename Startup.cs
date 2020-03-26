@@ -81,6 +81,7 @@ namespace AdvertismentPlatform
             services.AddScoped<IBikeItemRepository, BikeRepository>();
             services.AddScoped<IAdvertismentRepository, AdvertismentRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<DataProtectionPurposeStrings>();
         }
 
 
