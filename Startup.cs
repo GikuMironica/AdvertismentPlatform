@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using AdvertismentPlatform.Models.MySqlRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using AdvertismentPlatform.Security;
 
 namespace AdvertismentPlatform
 {
@@ -44,14 +45,19 @@ namespace AdvertismentPlatform
 
             services.AddDbContextPool<AppDbContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("adplatform")));
-
+            
             services.AddIdentity<ApplicationUser, IdentityRole>( options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 3;
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+                options.SignIn.RequireConfirmedEmail = true;
+                options.Lockout.MaxFailedAccessAttempts = 4;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             })
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<CustomEmailConfirmationTokenProvider<ApplicationUser>>("CustomEmailConfirmation");
 
 
             services.AddAuthentication()
@@ -66,10 +72,18 @@ namespace AdvertismentPlatform
                     options.AppSecret = "e09b7365a46ec7b5f6c2fb4f1dc91b77";
                 });
 
+            // Change all token lifetime to 10h 
+            //services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(10));
+
+            // after creating custom TokenProvider for email confirmation, configure lifetime to 3 days
+            services.Configure<CustomEmailConfirmationTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromDays(3));
+
             services.AddScoped<IItemRepository<ItemCategory>, BaseItemRepository>();
             services.AddScoped<IAutoItemRepository, AutoRepository>();
             services.AddScoped<IBikeItemRepository, BikeRepository>();
             services.AddScoped<IAdvertismentRepository, AdvertismentRepository>();
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<DataProtectionPurposeStrings>();
         }
 
 
