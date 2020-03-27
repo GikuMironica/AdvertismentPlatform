@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +13,6 @@ namespace AdvertismentPlatform.Models
         [StringLength(2)]
         public int? Doors { get; set; }
 
-        [MaxLength(2)]
         public string? Car_Type { get; set; }
 
         [StringLength(2)]

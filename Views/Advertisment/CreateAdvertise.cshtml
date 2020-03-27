@@ -1,0 +1,29 @@
+﻿
+@{ 
+    ViewBag.Title = "Create New Advertise";
+}
+
+<h1>Add Article</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                                     
+                <div>
+                    <h3 class="createAdType">Category:</h3>
+                    <a id="selectedItemTypevalue" class="nav-link dropdown-toggle createAdType h4" style="color:black" href="#" id="DropDown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        
+                    </a>
+                    <div id="selectedItemType" class="dropdown-menu" aria-labelledby="DropDown">
+                        <a class="dropdown-item" asp-controller="Advertisment"
+                                           asp-action="CreateBikeAd">Bike</a>
+                        <a class="dropdown-item" asp-controller="Advertisment"
+                                           asp-action="CreateCarAd">Car</a>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+

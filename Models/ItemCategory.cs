@@ -25,7 +25,7 @@ namespace AdvertismentPlatform.Models
         public Advertisment Advertisment { get; set; }
 
         [Display(Name = "Production year")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ProductAge { get; set; }
 
         [StringLength(7)]

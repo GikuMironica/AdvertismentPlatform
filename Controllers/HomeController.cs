@@ -30,7 +30,7 @@ namespace AdvertismentPlatform.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var advertise = await advertismentRepository.GetById(2);
+            
            
 
             return View();
