@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace AdvertismentPlatform.Handlers
 {
     
-     public class EmailHandler
+     public class EmailHandler : IEmailSender
     {
         private IConfiguration Configuration { get; }
         private SmtpClient client;

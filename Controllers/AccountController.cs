@@ -18,6 +18,7 @@ namespace AdvertismentPlatform.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
+        private readonly IEmailSender emailHandler;
 
         /**
          * Controller
@@ -32,6 +33,7 @@ namespace AdvertismentPlatform.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            emailHandler = new EmailHandler(configuration);
         }
         
         /**
@@ -71,8 +73,7 @@ namespace AdvertismentPlatform.Controllers
                     }
 
                    
-                     EmailHandler emailHandler = new EmailHandler(configuration);
-                        var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n"+confirmationLink);
+                    var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n"+confirmationLink);
 
                     if (status)
                     {
@@ -274,8 +275,9 @@ namespace AdvertismentPlatform.Controllers
                         ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
                             "email, by clicking on the confirmation link we have emailed you";
 
-                        EmailHandler emailHandler = new EmailHandler(configuration);
+                        
                         var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n" + confirmationLink);
+                        
                         return View("Error");
                     }
 
@@ -355,9 +357,8 @@ namespace AdvertismentPlatform.Controllers
                             new { email = model.Email, token = token }, Request.Scheme);
 
                     // Email to the user the reset password link
-                    EmailHandler emailHandler = new EmailHandler(configuration);
                     var result = await emailHandler.SendEmail(model.Email, "Forgot Password", "Click the link below in order to reset your password\n" + passwordResetLink);
-
+                    
                     return View("ForgotPasswordConfirmation");
                     
                 }
