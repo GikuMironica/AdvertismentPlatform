@@ -1,0 +1,23 @@
+﻿
+    <div class="text-center">
+        @if (ViewBag.OperationResult == "Success")
+        {
+            <h2 class="text-success">@ViewBag.OperationResult</h2>
+            <h5>@ViewBag.Message</h5>
+            <hr />
+
+            <a class="btn btn-success" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller">
+                Proceed to @ViewBag.NextAction
+            </a>
+        }
+        else
+        {
+            <h2 class="text-danger">@ViewBag.OperationResult</h2>
+            <h5>@ViewBag.Message</h5>
+            <hr />
+
+            <a class="btn btn-success" asp-action="@ViewBag.Action" asp-controller="@ViewBag.Controller">
+                Back
+            </a>
+        }
+    </div>

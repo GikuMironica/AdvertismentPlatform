@@ -5,6 +5,7 @@
 
 <h2>Add Car</h2>
 <form enctype="multipart/form-data" method="post" asp-action="CreateCarAd">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group row">
         <div class="col-2">
             <label asp-for="Brand"></label>
@@ -19,7 +20,7 @@
         <div class="col-3">
             <div class="custom-file">
                 <input asp-for="Picture" class="form-control custom-file-input">
-                <label class="custom-file-label">Choose File....</label>
+                <label class="custom-file-label">Choose Picture....</label>
             </div>
         </div>
     </div>
@@ -41,7 +42,7 @@
         </div>
 
         <div class="col-4">
-            <Input asp-for="ProductAge" type="date" class="form-control" />
+            <Input asp-for="ProductAge" type="date" id="today-date" class="form-control" />
             <span asp-validation-for="ProductAge" class="text-danger"></span>
         </div>
     </div>
@@ -52,7 +53,7 @@
         </div>
 
         <div class="col-4">
-            <Input asp-for="Mileage" type ="text" class="form-control" />
+            <Input asp-for="Mileage" type="text" class="form-control" />
             <span asp-validation-for="Mileage" class="text-danger"></span>
         </div>
     </div>
@@ -75,8 +76,8 @@
         </div>
 
         <div class="col-4">
-            <Input asp-for="Seats" type ="text" class="form-control" />
-            <span asp-validation-for="Seats"  class="text-danger"></span>
+            <Input asp-for="Seats" type="text" class="form-control" />
+            <span asp-validation-for="Seats" class="text-danger"></span>
         </div>
     </div>
 
@@ -139,4 +140,5 @@
             }
             );
     </script>
+       
 }
