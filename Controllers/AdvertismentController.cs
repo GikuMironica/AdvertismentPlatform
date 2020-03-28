@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AdvertismentPlatform.Models;
 using AdvertismentPlatform.ViewModels;
@@ -10,12 +11,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AdvertismentPlatform.Controllers
 {
     
     public class AdvertismentController : Controller
     {
+        private string carModelsJsonPath = null; 
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
         private readonly IAdvertismentRepository advertismentRepository;
@@ -27,6 +31,7 @@ namespace AdvertismentPlatform.Controllers
             hostingEnvironment = IHostingEnvironment;
             this.userManager = userManager;
             this.advertismentRepository = repository;
+            carModelsJsonPath = Path.Combine(hostingEnvironment.WebRootPath, "Resource", "CarTypes.json");
         }
 
         [HttpGet]
@@ -37,25 +42,8 @@ namespace AdvertismentPlatform.Controllers
 
         [HttpGet]
         public IActionResult CreateCarAd()
-        {
-            List<string> car_types = new List<string>
-            {
-                "Sedan",
-                "Coupe",
-                "Hatchback",
-                "Fastback",
-                "GT",
-                "Convertible",
-                "Minivan",
-                "SUV"
-            };
-
-            var types = new SelectList(car_types);
-            var model = new CreateCarViewModel();
-            model.CarTypes = types;
-            model.ProductAge = DateTime.Today;
-
-            return View(model);
+        {            
+            return View(initializeModel());                        
         }
 
 
@@ -132,24 +120,24 @@ namespace AdvertismentPlatform.Controllers
                 } 
                 
             }
+        
+            return View(initializeModel());
+        }
 
-            List<string> car_types = new List<string>
+        public CreateCarViewModel initializeModel()
+        {            
+            string jsonText = null;
+            // read Json File, deserialize it to List<string>
+            using (var reader = new StreamReader(carModelsJsonPath))
             {
-                "Sedan",
-                "Coupe",
-                "Hatchback",
-                "Fastback",
-                "GT",
-                "Convertible",
-                "Minivan",
-                "SUV"
-            };
-
-            var types = new SelectList(car_types);
-            var rerenderedModel = new CreateCarViewModel();
-            rerenderedModel.CarTypes = types;
-            rerenderedModel.ProductAge = DateTime.Today;
-            return View(rerenderedModel);
+                jsonText = reader.ReadToEnd();
+            };            
+            var carModels = JsonConvert.DeserializeObject<List<string>>(jsonText);
+            var types = new SelectList(carModels);
+            var renderModel = new CreateCarViewModel();
+            renderModel.CarTypes = types;
+            renderModel.ProductAge = DateTime.Today;
+            return renderModel;
         }
     }
 }
