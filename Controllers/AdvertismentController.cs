@@ -43,7 +43,7 @@ namespace AdvertismentPlatform.Controllers
         [HttpGet]
         public IActionResult CreateCarAd()
         {            
-            return View(initializeModel());                        
+            return View(initializeCarModel());                        
         }
 
 
@@ -113,18 +113,109 @@ namespace AdvertismentPlatform.Controllers
                         ViewBag.Action = "CreateCarAD";
                         ViewBag.Controller = "Advertisment";
                     }
-
-
-                    return View("ResultView");
                     
-                } 
-                
-            }
-        
-            return View(initializeModel());
+                    return View("ResultView");                    
+                }                 
+            }        
+            return View(initializeCarModel());
         }
 
-        public CreateCarViewModel initializeModel()
+
+        [HttpGet]
+        public IActionResult CreateBikeAd()
+        {
+            var model = new CreateBikeViewModel();
+            model.ProductAge = DateTime.Today;
+            return View(model);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBikeAd(CreateBikeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = null;
+                if (model.Picture != null)
+                {
+                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "AdvertismentPictures");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    model.Picture.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+
+                var user = await userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = "User cannot be found";
+                    return View("NotFound");
+                }
+                else
+                {
+                    Advertisment advertisment = new Advertisment
+                    {
+                        Title = model.Title,
+                        PostDate = DateTime.UtcNow,
+                        ApplicationUser = user,
+                        Item = new BikeItem
+                        {
+                            Price = Double.Parse(model.Price),
+                            Brand = model.Brand,
+                            ProductAge = model.ProductAge,
+                            Description = model.Description                           
+                        }
+                                                
+                    };
+
+                    if (model.Mileage != null) advertisment.Item.Mileage = Int32.Parse(model.Mileage);
+                    if (model.TopSpeed != null) ((BikeItem)(advertisment.Item)).TopSpeed = Int32.Parse(model.TopSpeed);
+                    if (model.Picture != null)
+                    {
+                        string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "AdvertismentPictures");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        model.Picture.CopyTo(new FileStream(filePath, FileMode.Create));
+                    }
+                    advertisment.Picture = uniqueFileName;
+/*
+                    if (uniqueFileName != null)
+                    {
+                        advertisment.Picture = uniqueFileName;
+                    }
+*/
+                    try
+                    {
+                        await advertismentRepository.Add(advertisment);
+
+                        ViewBag.Title = "Success";
+                        ViewBag.OperationResult = "Success";
+                        ViewBag.Message = "You have successfuly created a new article.\n";
+                        ViewBag.Action = "ListMyArticles";
+                        ViewBag.Controller = "Advertisment";
+                        ViewBag.NextAction = "my articles";
+                    }
+                    catch (Exception e)
+                    {
+                        ViewBag.Title = "Fail";
+                        ViewBag.OperationResult = "Failed to create new article";
+                        ViewBag.Message = "Try again \n";
+                        ViewBag.Action = "CreateCarAD";
+                        ViewBag.Controller = "Advertisment";
+                    }
+
+                    return View("ResultView");
+                }
+            }
+            var renderModel = new CreateBikeViewModel();
+            renderModel.ProductAge = DateTime.Today;
+            return View(renderModel);           
+        }
+
+
+
+        public CreateCarViewModel initializeCarModel()
         {            
             string jsonText = null;
             // read Json File, deserialize it to List<string>
