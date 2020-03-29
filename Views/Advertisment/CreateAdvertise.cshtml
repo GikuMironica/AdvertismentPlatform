@@ -5,11 +5,9 @@
 
 <h1>Add Article</h1>
 <br />
-<div class="row card bg-light">
+<div class="row card bg-light m-1">
     <div class="col-md-12 card-body">
         <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-
             <div>
                 <h3 class="createAdType">Category:</h3>
                 <a id="selectedItemTypevalue" class="nav-link dropdown-toggle createAdType h4" style="color:black" href="#"
@@ -28,14 +26,14 @@
 
 <br />
 
-<div id="bikeAnchor" class="card bg-light hideble" style="display : none">
+<div id="bikeAnchor" class="card bg-light hideble p-1" style="display : none">
     <div class="card-body">
         <partial name="~/Views/Advertisment/CreateBikeAd.cshtml" for="@Model.bike" />
     </div>
 </div>
 
 
-<div id="carAnchor" class="card bg-light hideble" style="display : none">
+<div id="carAnchor" class="card bg-light hideble p-1" style="display : none">
     <div class="card-body">
         <partial name="~/Views/Advertisment/CreateCarAd.cshtml" for="@Model.car" />
     </div>

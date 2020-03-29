@@ -46,7 +46,7 @@ namespace AdvertismentPlatform.Controllers
             };
             return View(combinedModel);
         }
-
+                
         [HttpGet]
         public IActionResult CreateCarAd()
         {            

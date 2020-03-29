@@ -52,9 +52,11 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkRight">
                                         <a class="dropdown-item" asp-controller="Account"
                                            asp-action="ChangePassword">Password</a>
+                                        <a class="dropdown-item" asp-controller="Account"
+                                           asp-action="UpdateProfileData">Settings</a>
                                         <form class="dropdown-item" method="post" asp-action="logout" asp-controller="account">
                                             <button type="submit" class="nav-link btn btn-link py-0 text-black-50" style="width:auto">
-                                             Logout @User.Identity.Name
+                                                Logout @User.Identity.Name
                                             </button>
                                         </form>
                                     </div>
@@ -81,8 +83,8 @@
             </main>
         </div>
 
-        <footer class="border-top footer text-muted ">
-            <div class="container">
+        <footer class="border-top footer text-muted bg-dark">
+            <div class="container text-center">
                 &copy; 2020 - AdvertismentPlatform
             </div>
         </footer>

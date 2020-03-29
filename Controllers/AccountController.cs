@@ -505,6 +505,30 @@ namespace AdvertismentPlatform.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> UpdateProfileData()
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            EditAccountSettingsViewModel model = new EditAccountSettingsViewModel
+            {
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                City = user.City,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfileData(EditAccountSettingsViewModel model)
+        {
+            var user = await userManager.GetUserAsync(User);
+                        
+            return View(model);
+        }
 
         [HttpGet]
         [AllowAnonymous]
