@@ -37,7 +37,14 @@ namespace AdvertismentPlatform.Controllers
         [HttpGet]
         public IActionResult CreateAdvertise()
         {
-            return View();
+            var model = new CreateBikeViewModel();
+            model.ProductAge = DateTime.Today;
+            BikeAndCarViewModel combinedModel = new BikeAndCarViewModel
+            {
+                car = initializeCarModel(),
+                bike = model
+            };
+            return View(combinedModel);
         }
 
         [HttpGet]
@@ -48,10 +55,11 @@ namespace AdvertismentPlatform.Controllers
 
 
         [HttpPost]
-        public async  Task<IActionResult> CreateCarAd(CreateCarViewModel model)
+        public async  Task<IActionResult> CreateCarAd(BikeAndCarViewModel compositeModel)
         {
             if (ModelState.IsValid)
             {
+                var model = compositeModel.car;
                 string uniqueFileName = null;
                 if (model.Picture != null)
                 {
@@ -132,10 +140,11 @@ namespace AdvertismentPlatform.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateBikeAd(CreateBikeViewModel model)
+        public async Task<IActionResult> CreateBikeAd(BikeAndCarViewModel compositeModel)
         {
             if (ModelState.IsValid)
             {
+                var model = compositeModel.bike;
                 string uniqueFileName = null;
                 if (model.Picture != null)
                 {
