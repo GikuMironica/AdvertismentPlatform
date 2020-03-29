@@ -12,7 +12,7 @@
 
             <div>
                 <h3 class="createAdType">Category:</h3>
-                <a id="selectedItemTypevalue" class="nav-link dropdown-toggle createAdType h4" style="color:black" href="#" 
+                <a id="selectedItemTypevalue" class="nav-link dropdown-toggle createAdType h4" style="color:black" href="#"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     None
                 </a>
@@ -37,23 +37,10 @@
 
 <div id="carAnchor" class="card bg-light hideble" style="display : none">
     <div class="card-body">
-        <partial name="~/Views/Advertisment/CreateCarAd.cshtml" for="@Model.car"/>
+        <partial name="~/Views/Advertisment/CreateCarAd.cshtml" for="@Model.car" />
     </div>
 </div>
 
 @section Scripts{
-    <script>
-        function toggle_visibility(id, category) {
-            var e = document.getElementById(id);
-            
-            if (e.style.display == 'block')
-                e.style.display = 'none';
-            else
-                e.style.display = 'block';
-
-            $('.hideble').not('#' + id).hide();
-            $('#selectedItemTypevalue').text(category);
-        }
-      
-    </script>
+    <script src="~/js/ToggleElements.js"></script>
 }
