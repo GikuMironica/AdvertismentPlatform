@@ -7,6 +7,6 @@ namespace AdvertismentPlatform.Models
 {
     public interface IAdvertismentRepository : IRepository<Advertisment>
     {
-       // extra operations here for future
+        public Task<IEnumerable<Advertisment>> GetAllByUserId(string id);
     }
 }

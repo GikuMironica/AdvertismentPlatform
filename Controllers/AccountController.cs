@@ -527,41 +527,44 @@ namespace AdvertismentPlatform.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfileData(EditAccountSettingsViewModel model)
         {
-            var user = await userManager.GetUserAsync(User);
-            
-            if (user == null) 
+            if (ModelState.IsValid)
             {
-                ViewBag.ErrorMessage = $"User with Id = {user.Id} cannot be found";
-                return View("NotFound");
+                
+                var user = await userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with Id = {user.Id} cannot be found";
+                    return View("NotFound");
+                }
+                else
+                {
+                    user.Email = model.Email;
+                    user.City = model.City;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.PhoneNumber = model.PhoneNumber;
+                }
+
+                var result = await userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    ViewBag.Title = "Success";
+                    ViewBag.OperationResult = "Success";
+                    ViewBag.Message = "Account data successfully updated";
+                    ViewBag.Action = "Index";
+                    ViewBag.NextAction = "Home Page";
+                    ViewBag.Controller = "Home";
+
+                    return View("ResultView");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
-            else
-            {
-                user.Email = model.Email;
-                user.City = model.City;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.PhoneNumber = model.PhoneNumber;
-            }
-
-            var result = await userManager.UpdateAsync(user);
-
-            if (result.Succeeded)
-            {
-                ViewBag.Title = "Success";
-                ViewBag.OperationResult = "Success";
-                ViewBag.Message = "Account data successfully updated";
-                ViewBag.Action = "Index";
-                ViewBag.NextAction = "Home Page";
-                ViewBag.Controller = "Home";
-
-                return View("ResultView");
-            }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-
             return View(model);
         }
 

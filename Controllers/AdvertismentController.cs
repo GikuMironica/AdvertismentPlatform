@@ -222,6 +222,22 @@ namespace AdvertismentPlatform.Controllers
             return View(renderModel);           
         }
 
+        /**
+         * HttpGet variation of MyAdvertisments action method
+         * asynchroniously fetches all advertisments of the current logged in user 
+         * via IAdvertismentRepository interface
+         * 
+         * Returns a MyAdvertisments View with a list of Advertisments as Model
+         */
+        [HttpGet]
+        public async Task<IActionResult> MyAdvertisments()
+        {
+            var user = await userManager.GetUserAsync(User);
+            string id = user.Id;
+
+            var advertisments = await advertismentRepository.GetAllByUserId(id);
+            return View(advertisments);
+        }
 
 
         public CreateCarViewModel initializeCarModel()
@@ -233,6 +249,7 @@ namespace AdvertismentPlatform.Controllers
                 jsonText = reader.ReadToEnd();
             };            
             var carModels = JsonConvert.DeserializeObject<List<string>>(jsonText);
+
             var types = new SelectList(carModels);
             var renderModel = new CreateCarViewModel();
             renderModel.CarTypes = types;

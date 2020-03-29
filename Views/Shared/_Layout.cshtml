@@ -24,7 +24,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                            @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                            @if (signInManager.IsSignedIn(User))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink"
@@ -32,10 +32,15 @@
                                         Manage
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" asp-controller="Administration"
-                                           asp-action="ListUsers">Users</a>
-                                        <a class="dropdown-item" asp-controller="Administration"
-                                           asp-action="ListRoles">Roles</a>
+                                        @if ((User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                                        {
+                                            <a class="dropdown-item" asp-controller="Administration"
+                                               asp-action="ListUsers">Users</a>
+                                            <a class="dropdown-item" asp-controller="Administration"
+                                               asp-action="ListRoles">Roles</a>
+                                        }
+                                        <a class="dropdown-item" asp-controller="Advertisment"
+                                           asp-action="MyAdvertisments">My Advertisments</a>
                                     </div>
                                 </li>
                             
