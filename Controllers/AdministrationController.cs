@@ -244,6 +244,7 @@ namespace AdvertismentPlatform.Controllers
             return View(model);
         }
 
+        [HttpPost]
         [Authorize(Roles = "Super Admin")]
         public async Task<IActionResult> DeleteRole(string id)
         {

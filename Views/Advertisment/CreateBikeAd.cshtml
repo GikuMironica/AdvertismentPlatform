@@ -1,0 +1,120 @@
+﻿@model AdvertismentPlatform.ViewModels.CreateBikeViewModel
+@{
+    ViewBag.Title = "Bike Advertise";
+}
+
+<h2>Add Bike</h2>
+<form enctype="multipart/form-data" method="post" asp-action="CreateBikeAd">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Brand"></label>
+        </div>
+        <div class="col-4">
+            <Input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+        <div class="col-auto">
+            <label asp-for="Picture"></label>
+        </div>
+        <div class="col-3">
+            <div class="custom-file">
+                <input asp-for="Picture" class="form-control custom-file-input">
+                <label class="custom-file-label">Choose Picture....</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="ProductAge"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="ProductAge" type="date" class="form-control" />
+            <span asp-validation-for="ProductAge" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Mileage"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="Mileage" type="text" class="form-control" />
+            <span asp-validation-for="Mileage" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="TopSpeed"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="TopSpeed" type="text" class="form-control" />
+            <span asp-validation-for="TopSpeed" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Price"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        @* <div class="col-1">
+                <label asp-for="Currency"></label>
+            </div>
+
+            <div class="col-2">
+                <select asp-for="Currency" asp-items="Model.Currencies" class="form-control"></select>
+                <span asp-validation-for="Currency" class="text-danger"></span>
+            </div> *@
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Title"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Description"></label>
+        </div>
+
+        <div class="col-4">
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Create" />
+        <a asp-action="CreateAdvertise" class="btn btn-success">Back</a>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            }
+            );
+    </script>
+
+}

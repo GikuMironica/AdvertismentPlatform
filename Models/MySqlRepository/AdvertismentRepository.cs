@@ -29,5 +29,14 @@ namespace AdvertismentPlatform.Models
                 .Include(advertisment => advertisment.ApplicationUser)
                 .SingleOrDefaultAsync(s => s.Id == id);
         }
+
+        public async Task<IEnumerable<Advertisment>> GetAllByUserId(string id)
+        {
+            return await context.Advertisments
+                 .Include(advertisment => advertisment.Item)
+                 .Include(advertisment => advertisment.ApplicationUser)
+                 .Where(advertisment => advertisment.ApplicationUserId == id)
+                 .ToListAsync();
+        }
     }
 }

@@ -16,8 +16,10 @@ namespace AdvertismentPlatform.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
+        private readonly IEmailSender emailHandler;
 
         /**
          * Controller
@@ -26,12 +28,15 @@ namespace AdvertismentPlatform.Controllers
          *  SignInManager
          */
         public AccountController(UserManager<ApplicationUser> userManager,
+                                 RoleManager<IdentityRole> roleManager,
                                  SignInManager<ApplicationUser> signInManager,
                                  IConfiguration configuration)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            emailHandler = new EmailHandler(configuration);
         }
         
         /**
@@ -71,8 +76,7 @@ namespace AdvertismentPlatform.Controllers
                     }
 
                    
-                     EmailHandler emailHandler = new EmailHandler(configuration);
-                        var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n"+confirmationLink);
+                    var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n"+confirmationLink);
 
                     if (status)
                     {
@@ -274,8 +278,9 @@ namespace AdvertismentPlatform.Controllers
                         ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
                             "email, by clicking on the confirmation link we have emailed you";
 
-                        EmailHandler emailHandler = new EmailHandler(configuration);
+                        
                         var status = await emailHandler.SendEmail(user.Email, "Registration Confirmation", "Click the link below to confirm your email\n" + confirmationLink);
+                        
                         return View("Error");
                     }
 
@@ -316,7 +321,12 @@ namespace AdvertismentPlatform.Controllers
 
             if (result.Succeeded)
             {
-                return View();
+                var resultRole = await userManager.AddToRoleAsync(user, "User");
+                if (resultRole.Succeeded)
+                {
+                    return View();
+                }
+                
             }
             ViewBag.ErrorTitle = "Email cannot be confirmed";
             return View("Error");
@@ -355,9 +365,8 @@ namespace AdvertismentPlatform.Controllers
                             new { email = model.Email, token = token }, Request.Scheme);
 
                     // Email to the user the reset password link
-                    EmailHandler emailHandler = new EmailHandler(configuration);
                     var result = await emailHandler.SendEmail(model.Email, "Forgot Password", "Click the link below in order to reset your password\n" + passwordResetLink);
-
+                    
                     return View("ForgotPasswordConfirmation");
                     
                 }
@@ -504,6 +513,68 @@ namespace AdvertismentPlatform.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateProfileData()
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            EditAccountSettingsViewModel model = new EditAccountSettingsViewModel
+            {
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                City = user.City,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfileData(EditAccountSettingsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                
+                var user = await userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"User with Id = {user.Id} cannot be found";
+                    return View("NotFound");
+                }
+                else
+                {
+                    user.Email = model.Email;
+                    user.City = model.City;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.PhoneNumber = model.PhoneNumber;
+                }
+
+                var result = await userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    ViewBag.Title = "Success";
+                    ViewBag.OperationResult = "Success";
+                    ViewBag.Message = "Account data successfully updated";
+                    ViewBag.Action = "Index";
+                    ViewBag.NextAction = "Home Page";
+                    ViewBag.Controller = "Home";
+
+                    return View("ResultView");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
 
         [HttpGet]
         [AllowAnonymous]

@@ -1,0 +1,156 @@
+﻿@model AdvertismentPlatform.ViewModels.EditCarViewModel
+
+@{
+    ViewBag.Title = "Car Advertise";
+    var photopath = "~/AdvertismentPictures/" + (Model.PicturePath ?? "qm.jpg");
+}
+
+<h2>Edit Car Advertise</h2>
+<form enctype="multipart/form-data" method="post" asp-action="EditAutoItem" asp-controller="Advertisment">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input hidden asp-for="Id" />
+    <input hidden asp-for="PicturePath" />
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Brand"></label>
+        </div>
+        <div class="col-4">
+            <Input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+        <div class="col-auto">
+            <label asp-for="Picture"></label>
+        </div>
+        <div class="col-3">
+            <div class="custom-file">
+                <input asp-for="Picture" class="form-control custom-file-input">
+                <label class="custom-file-label">Click to change photo</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="ProductAge"></label>
+                </div>
+
+                <div class="col-md-8">
+                    <Input asp-for="ProductAge" type="date" id="today-date" class="form-control" />
+                    <span asp-validation-for="ProductAge" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Mileage"></label>
+                </div>
+
+                <div class="col-md-8">
+                    <Input asp-for="Mileage" type="text" class="form-control" />
+                    <span asp-validation-for="Mileage" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Doors"></label>
+                </div>
+
+                <div class="col-md-8">
+                    <Input asp-for="Doors" type="text" class="form-control" />
+                    <span asp-validation-for="Doors" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Seats"></label>
+                </div>
+
+                <div class="col-md-8">
+                    <Input asp-for="Seats" type="text" class="form-control" />
+                    <span asp-validation-for="Seats" class="text-danger"></span>
+                </div>
+            </div>
+            
+        </div>     
+
+        <div class="col-4 text-center">
+            <img src="@photopath" height="200" width="200" asp-append-version="true"/>
+        </div>
+               
+    </div>
+          
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Price"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        @* <div class="col-1">
+                <label asp-for="Currency"></label>
+            </div>
+
+            <div class="col-2">
+                <select asp-for="Currency" asp-items="Model.Currencies" class="form-control"></select>
+                <span asp-validation-for="Currency" class="text-danger"></span>
+            </div> *@
+
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Title"></label>
+        </div>
+
+        <div class="col-4">
+            <Input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Description"></label>
+        </div>
+
+        <div class="col-4">
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Update</button>
+        @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
+        {
+            <a asp-action="Index" asp-controller="Home" class="btn btn-success">Back</a>
+        }
+        else
+        {
+            <a asp-action="MyAdvertisments" class="btn btn-success">Back</a>
+        }
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName);
+                });
+            }
+            );
+    </script>
+
+}

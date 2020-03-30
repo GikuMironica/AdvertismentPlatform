@@ -8,6 +8,7 @@
     <title>@ViewBag.Title - AdvertismentPlatform</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 </head>
 <body>
     
@@ -24,7 +25,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                            @if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                            @if (signInManager.IsSignedIn(User))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink"
@@ -32,10 +33,15 @@
                                         Manage
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" asp-controller="Administration"
-                                           asp-action="ListUsers">Users</a>
-                                        <a class="dropdown-item" asp-controller="Administration"
-                                           asp-action="ListRoles">Roles</a>
+                                        @if ((User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                                        {
+                                            <a class="dropdown-item" asp-controller="Administration"
+                                               asp-action="ListUsers">Users</a>
+                                            <a class="dropdown-item" asp-controller="Administration"
+                                               asp-action="ListRoles">Roles</a>
+                                        }
+                                        <a class="dropdown-item" asp-controller="Advertisment"
+                                           asp-action="MyAdvertisments">My Advertisments</a>
                                     </div>
                                 </li>
                             
@@ -52,9 +58,11 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkRight">
                                         <a class="dropdown-item" asp-controller="Account"
                                            asp-action="ChangePassword">Password</a>
+                                        <a class="dropdown-item" asp-controller="Account"
+                                           asp-action="UpdateProfileData">Settings</a>
                                         <form class="dropdown-item" method="post" asp-action="logout" asp-controller="account">
                                             <button type="submit" class="nav-link btn btn-link py-0 text-black-50" style="width:auto">
-                                             Logout @User.Identity.Name
+                                                Logout @User.Identity.Name
                                             </button>
                                         </form>
                                     </div>
@@ -81,8 +89,8 @@
             </main>
         </div>
 
-        <footer class="border-top footer text-muted ">
-            <div class="container">
+        <footer class="border-top footer text-muted bg-dark">
+            <div class="container text-center">
                 &copy; 2020 - AdvertismentPlatform
             </div>
         </footer>
