@@ -44,7 +44,7 @@
                 {
                     <div class="col-4 ">
 
-                        <form asp-action="DeleteAdvertisment" asp-route-id="@Model.Id" method="post">
+                        <form asp-action="DeleteAdvertisment" asp-controller="Advertisment" asp-route-id="@Model.Id" method="post">
 
 
                             <a asp-action=@ItemType asp-controller="Advertisment" asp-route-id="@Model.Id" class="btn btn-secondary"><i class="fas fa-cog"></i></a>

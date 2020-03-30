@@ -146,8 +146,9 @@ namespace AdvertismentPlatform.Controllers
                     
                     return View("ResultView");                    
                 }                 
-            }        
-            return View(initializeCarModel());
+            }
+            compositeModel.car.CarTypes = initializeCarModel().CarTypes;
+            return View(compositeModel);
         }
 
         [HttpGet]
@@ -281,9 +282,7 @@ namespace AdvertismentPlatform.Controllers
                     return View("ResultView");
                 }
             }
-            var renderModel = new CreateBikeViewModel();
-            renderModel.ProductAge = DateTime.Today;
-            return View(renderModel);           
+         return View(compositeModel);           
         }
 
 

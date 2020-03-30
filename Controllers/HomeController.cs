@@ -28,14 +28,21 @@ namespace AdvertismentPlatform.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index2()
         {
             var advertisments = await advertismentRepository.GetAll();           
-
+            
             return View(advertisments);
         }
 
-       
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(int pageSize=7, int pageNumber=1)
+        {
+            var advertisments = await advertismentRepository.GetAll();
+
+            return View(advertisments);
+        }
 
     }
 }

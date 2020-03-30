@@ -19,7 +19,7 @@ namespace AdvertismentPlatform.ViewModels
         [Required]
         [StringLength(2)]
         [Range(1, 60)]
-        [RegularExpression(@"^\d$", ErrorMessage = "Must be a number")]
+        [RegularExpression(@"^\d$", ErrorMessage = "Sears must be a number")]
         public string Seats { get; set; }
 
         [Required]
@@ -28,12 +28,11 @@ namespace AdvertismentPlatform.ViewModels
 
         [Required]
         [StringLength(1)]
-        [Range(1,9)]
-        [RegularExpression(@"[\d]", ErrorMessage = "Never saw a car with that many doors, are you sure?")]
+        [RegularExpression(@"[\d]", ErrorMessage = "Doors must be a number")]
         public string Doors { get; set; }
 
         [Required]
-        [RegularExpression(@"-?\d+(?:\.\d+)?", ErrorMessage = "Must be a double or integer")]
+        [RegularExpression(@"-?\d+(?:\.\d+)?", ErrorMessage = "Price must be a double or integer")]
         public string Price { get; set; }
 
         [MaxLength(50)]
@@ -54,7 +53,7 @@ namespace AdvertismentPlatform.ViewModels
 
         [StringLength(7)]
         [Required]
-        [RegularExpression(@"\d*", ErrorMessage = "Must be a number")]
+        [RegularExpression(@"\d*", ErrorMessage = "Mileage must be a number")]
         public string Mileage { get; set; }
 
         public SelectList CarTypes { get; set; }
