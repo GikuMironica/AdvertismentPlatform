@@ -29,7 +29,7 @@
 
                         <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
                             <a class="btn btn-primary" asp-action="EditRole"
-                               asp-controller="Administration" asp-route-id="@role.Id">Edit</a>
+                               asp-controller="Administration" asp-route-id="@role.Id"><i class="fas fa-cog"></i></a>
 
                             @*Delete with a inline confirmation, no context switch *@
                             <span id="confirmDeleteSpan_@role.Id" style="display:none">
@@ -41,7 +41,7 @@
 
                             <span id="deleteSpan_@role.Id">
                                 <a href="#deleteSpan_@role.Id" class="btn btn-danger"
-                                   onclick="confirmDelete('@role.Id', true)">Delete</a>
+                                   onclick="confirmDelete('@role.Id', true)"><i class="fas fa-trash-alt"></i></a>
                             </span>
 
                         </form>

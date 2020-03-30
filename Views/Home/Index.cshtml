@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Advertisment>
+
+@{
     ViewBag.Title = "Home Page";
 }
 <br />
@@ -6,7 +8,45 @@
 
 <div class="text-center">
     <div class="text-right">
-        <a asp-action="CreateAdvertise" asp-controller="Advertisment" class="btn btn-primary">Create Advertise</a>
+        <a asp-action="CreateAdvertise" asp-controller="Advertisment" class="btn btn-primary"><i class="fas fa-bullhorn"></i>&nbsp;&nbsp;Create Advertise</a>
     </div>
     <hr />
 </div>
+
+@if (!Model.Any())
+{
+    <h2>There are no active ads currently.</h2>
+    <h5>You can create some <a asp-action="CreateAdvertise" class="text-success">Here</a></h5>
+}
+else
+{
+    
+    <div class="card ">
+
+        <div class="card-header bg-dark text-light mb-1">
+            <div class="row">
+                <div class="col-2"><b>Photo</b></div>
+                <div class="col-3 "><b>Item Details</b></div>
+                <div class="col-1 "><b>Price</b></div>
+                <div class="col-3 "><b>&nbsp;&nbsp;&nbsp;Seller Info</b></div>
+                <div class="col-3 "><b>Post Time</b></div>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+            @foreach (var currentModel in Model)
+            {
+                <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
+            }
+        </div>
+
+    </div>
+
+
+
+}
+
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}

@@ -19,6 +19,7 @@ namespace AdvertismentPlatform.Models
         {
             return await context.Advertisments
                  .Include(ad => ad.Item)
+                 .Include(ad => ad.ApplicationUser)
                  .ToListAsync();
         } 
 

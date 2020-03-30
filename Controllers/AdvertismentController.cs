@@ -137,7 +137,7 @@ namespace AdvertismentPlatform.Controllers
                     try
                     {
                         await advertismentRepository.Add(advertisment);
-                        InitializeResultView(true, "You have successfuly created a new article", "ListMyArticles", "Advertisment", "my articles");                      
+                        InitializeResultView(true, "You have successfuly created a new article", "MyAdvertisments", "Advertisment", "my articles");                      
                     }
                     catch(Exception e)
                     {
@@ -270,7 +270,7 @@ namespace AdvertismentPlatform.Controllers
                     try
                     {
                         await advertismentRepository.Add(advertisment);
-                        InitializeResultView(true, "You have successfuly created a new article", "ListMyArticles", "Advertisment", "my articles");
+                        InitializeResultView(true, "You have successfuly created a new article", "MyAdvertisments", "Advertisment", "my articles");
                        
                     }
                     catch (Exception e)

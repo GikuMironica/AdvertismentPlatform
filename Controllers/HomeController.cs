@@ -30,12 +30,12 @@ namespace AdvertismentPlatform.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            
-           
+            var advertisments = await advertismentRepository.GetAll();           
 
-            return View();
+            return View(advertisments);
         }
 
-        
+       
+
     }
 }
