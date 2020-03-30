@@ -46,7 +46,41 @@ namespace AdvertismentPlatform.Controllers
             };
             return View(combinedModel);
         }
-                
+
+
+        /**
+         * HttpGet variation of MyAdvertisments action method
+         * asynchroniously fetches all advertisments of the current logged in user 
+         * via IAdvertismentRepository interface
+         * 
+         * Returns a MyAdvertisments View with a list of Advertisments as Model
+         */
+        [HttpGet]
+        public async Task<IActionResult> MyAdvertisments()
+        {
+            var user = await userManager.GetUserAsync(User);
+            string id = user.Id;
+
+            var advertisments = await advertismentRepository.GetAllByUserId(id);
+            return View(advertisments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAdvertisment(string id)
+        {
+            int adId = Int32.Parse(id);
+            try
+            {
+                await advertismentRepository.Delete(adId);
+                return RedirectToAction("MyAdvertisments");
+            }
+            catch (Exception e)
+            {
+                return RenderErrorView();
+            }
+        }
+
+
         [HttpGet]
         public IActionResult CreateCarAd()
         {            
@@ -126,6 +160,18 @@ namespace AdvertismentPlatform.Controllers
                 }                 
             }        
             return View(initializeCarModel());
+        }
+
+        [HttpGet]
+        public IActionResult EditAutoItem(string id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EditAutoItem()
+        {
+            return View();
         }
 
 
@@ -222,37 +268,7 @@ namespace AdvertismentPlatform.Controllers
             return View(renderModel);           
         }
 
-        /**
-         * HttpGet variation of MyAdvertisments action method
-         * asynchroniously fetches all advertisments of the current logged in user 
-         * via IAdvertismentRepository interface
-         * 
-         * Returns a MyAdvertisments View with a list of Advertisments as Model
-         */
-        [HttpGet]
-        public async Task<IActionResult> MyAdvertisments()
-        {
-            var user = await userManager.GetUserAsync(User);
-            string id = user.Id;
-
-            var advertisments = await advertismentRepository.GetAllByUserId(id);
-            return View(advertisments);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DeleteAdvertisment(string id)
-        {
-            int adId = Int32.Parse(id);
-            try
-            {
-                await advertismentRepository.Delete(adId);
-                return RedirectToAction("MyAdvertisments");
-            }
-            catch(Exception e)
-            {
-                return RenderErrorView();
-            }
-        }
+        
 
         
         public CreateCarViewModel initializeCarModel()
