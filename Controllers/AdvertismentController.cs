@@ -239,7 +239,22 @@ namespace AdvertismentPlatform.Controllers
             return View(advertisments);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteAdvertisment(string id)
+        {
+            int adId = Int32.Parse(id);
+            try
+            {
+                await advertismentRepository.Delete(adId);
+                return RedirectToAction("MyAdvertisments");
+            }
+            catch(Exception e)
+            {
+                return RenderErrorView();
+            }
+        }
 
+        
         public CreateCarViewModel initializeCarModel()
         {            
             string jsonText = null;
@@ -255,6 +270,13 @@ namespace AdvertismentPlatform.Controllers
             renderModel.CarTypes = types;
             renderModel.ProductAge = DateTime.Today;
             return renderModel;
+        }
+
+        private IActionResult RenderErrorView()
+        {
+            ViewBag.ErrorTitle = "System Error";
+            ViewBag.ErrorMessage = "This advertisment couldn't be deleted\nDevelopers team is already informed, solution will be found soon.";
+            return View("Error");
         }
     }
 }

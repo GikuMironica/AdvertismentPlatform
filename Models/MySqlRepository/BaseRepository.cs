@@ -29,7 +29,7 @@ namespace AdvertismentPlatform.Models
 
         public abstract Task<Template> GetById(int id);
       
-        public async Task TaskDelete(int Id)
+        public async Task Delete(int Id)
         {
             var Entity = await context.Set<Template>().FindAsync(Id);
             if (Entity != null)
