@@ -163,9 +163,29 @@ namespace AdvertismentPlatform.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditAutoItem(string id)
+        public async Task<IActionResult> EditAutoItem(string id)
         {
-            return View();
+            var incomingModel = await advertismentRepository.GetById(Int32.Parse(id));
+            if (incomingModel == null)
+            {
+                ViewBag.ErrorMessage = $"Advertisment with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            EditCarViewModel model = new EditCarViewModel
+            {
+                
+                Title = incomingModel.Title,
+                Description = incomingModel.Item.Description,
+                ProductAge = incomingModel.Item.ProductAge,
+                Price = (incomingModel.Item.Price).ToString(),
+                Mileage = incomingModel.Item.Mileage.ToString(),
+                PicturePath = incomingModel.Picture,
+                Brand = incomingModel.Item.Brand,
+                Doors = ((AutoItem)(incomingModel.Item)).Doors.ToString(),
+                Seats = ((AutoItem)(incomingModel.Item)).Seats.ToString()
+                
+            };
+            return View(model);
         }
 
         [HttpPost]
