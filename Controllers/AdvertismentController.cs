@@ -212,29 +212,8 @@ namespace AdvertismentPlatform.Controllers
             }      
             return View();
         }
-
-
-       private void InitializeResultView(bool result, string message, string action, string controller, string? nextAction)
-        {
-            ViewBag.Message = message + "\n";
-            ViewBag.Action = action;
-            ViewBag.Controller = controller;
-
-            if (result)
-            {
-                ViewBag.Title = "Success";
-                ViewBag.OperationResult = "Success";               
-                ViewBag.NextAction = nextAction;
-            }
-            else
-            {
-                ViewBag.Title = "Failed";
-                ViewBag.OperationResult = "Failed";
-            }
-
-        }
+                   
         
-
         [HttpGet]
         public IActionResult CreateBikeAd()
         {
@@ -307,9 +286,88 @@ namespace AdvertismentPlatform.Controllers
             return View(renderModel);           
         }
 
-        
 
-        
+        [HttpGet]
+        public async Task<IActionResult> EditBikeItem(string id)
+        {
+            var incomingModel = await advertismentRepository.GetById(Int32.Parse(id));
+                    
+            if (incomingModel == null)
+            {
+                ViewBag.ErrorMessage = $"Advertisment with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            EditBikeViewModel model = new EditBikeViewModel
+            {
+                Title = incomingModel.Title,
+                Description = incomingModel.Item.Description,
+                ProductAge = incomingModel.Item.ProductAge,
+                Price = (incomingModel.Item.Price).ToString(),
+                Mileage = incomingModel.Item.Mileage.ToString(),
+                PicturePath = "~/AdvertismentPictures/" + ( incomingModel.Picture ?? "qm.jpg"),
+                Brand = incomingModel.Item.Brand,
+                TopSpeed = ((BikeItem)(incomingModel.Item)).TopSpeed.ToString()
+            };
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditBikeItem(EditBikeViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var editedBikeAdvertise = await advertismentRepository.GetById(model.Id);
+                editedBikeAdvertise.Title = model.Title;
+                editedBikeAdvertise.Item.Brand = model.Brand;
+                editedBikeAdvertise.Item.Description = model.Description;
+                editedBikeAdvertise.Item.Mileage = Int32.Parse(model.Mileage);
+                ((BikeItem)(editedBikeAdvertise.Item)).TopSpeed = Int32.Parse(model.TopSpeed);               
+                editedBikeAdvertise.Item.ProductAge = model.ProductAge;
+                editedBikeAdvertise.Item.Price = Double.Parse(model.Price);
+
+                if (model.Picture != null)
+                {
+                    editedBikeAdvertise.Picture = ProcessUploadedPhoto(model.Picture);
+                }
+
+                try
+                {
+                    await advertismentRepository.Update(editedBikeAdvertise);
+                    InitializeResultView(true, "You have successfuly updated this article", "Index", "Home", "Home");
+                }
+                catch (Exception e)
+                {
+                    InitializeResultView(false, "Failed to update this article", "MyAdvertisments", "Advertisment", "");
+                }
+
+                return View("ResultView");
+            }
+            return View();
+        }
+
+
+        private void InitializeResultView(bool result, string message, string action, string controller, string? nextAction)
+        {
+            ViewBag.Message = message + "\n";
+            ViewBag.Action = action;
+            ViewBag.Controller = controller;
+
+            if (result)
+            {
+                ViewBag.Title = "Success";
+                ViewBag.OperationResult = "Success";
+                ViewBag.NextAction = nextAction;
+            }
+            else
+            {
+                ViewBag.Title = "Failed";
+                ViewBag.OperationResult = "Failed";
+            }
+
+        }
+
         public CreateCarViewModel initializeCarModel()
         {            
             string jsonText = null;
