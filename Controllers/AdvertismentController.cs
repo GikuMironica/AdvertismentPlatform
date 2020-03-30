@@ -8,6 +8,7 @@ using AdvertismentPlatform.Models;
 using AdvertismentPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -97,10 +98,7 @@ namespace AdvertismentPlatform.Controllers
                 string uniqueFileName = null;
                 if (model.Picture != null)
                 {
-                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "AdvertismentPictures");
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    model.Picture.CopyTo(new FileStream(filePath, FileMode.Create));
+                    uniqueFileName = ProcessUploadedPhoto(model.Picture);
                 }
 
                 var user = await userManager.GetUserAsync(User);
@@ -139,21 +137,11 @@ namespace AdvertismentPlatform.Controllers
                     try
                     {
                         await advertismentRepository.Add(advertisment);
-
-                        ViewBag.Title = "Success";
-                        ViewBag.OperationResult = "Success";
-                        ViewBag.Message = "You have successfuly create a new article.\n";
-                        ViewBag.Action = "ListMyArticles";
-                        ViewBag.Controller = "Advertisment";
-                        ViewBag.NextAction = "my articles";
+                        InitializeResultView(true, "You have successfuly created a new article", "ListMyArticles", "Advertisment", "my articles");                      
                     }
                     catch(Exception e)
                     {
-                        ViewBag.Title = "Fail";
-                        ViewBag.OperationResult = "Failed to create new article";
-                        ViewBag.Message = "Try again \n";
-                        ViewBag.Action = "CreateCarAD";
-                        ViewBag.Controller = "Advertisment";
+                        InitializeResultView(false, "Failed to create new article", "CreateCarAD", "Advertisment", "");                        
                     }
                     
                     return View("ResultView");                    
@@ -188,12 +176,64 @@ namespace AdvertismentPlatform.Controllers
             return View(model);
         }
 
+
         [HttpPost]
-        public IActionResult EditAutoItem()
+        public async Task<IActionResult> EditAutoItem(EditCarViewModel model)
         {
+
+            if (ModelState.IsValid)
+            {
+                var editedCarAd = await advertismentRepository.GetById(model.Id);
+                editedCarAd.Title = model.Title;
+                editedCarAd.Item.Brand = model.Brand;
+                editedCarAd.Item.Description = model.Description;
+                editedCarAd.Item.Mileage = Int32.Parse(model.Mileage);
+                ((AutoItem)(editedCarAd.Item)).Seats = Int32.Parse(model.Seats);
+                ((AutoItem)(editedCarAd.Item)).Doors = Int32.Parse(model.Doors);
+                ((AutoItem)(editedCarAd.Item)).Price = Double.Parse(model.Price);
+                editedCarAd.Item.ProductAge = model.ProductAge;
+
+                if (model.Picture != null)
+                {
+                    editedCarAd.Picture = ProcessUploadedPhoto(model.Picture);             
+                }
+                      
+                    try
+                    {
+                        await advertismentRepository.Update(editedCarAd);
+                        InitializeResultView(true, "You have successfuly updated this article", "Index", "Home", "Home");
+                    }
+                    catch (Exception e)
+                    {
+                        InitializeResultView(false, "Failed to update this article", "MyAdvertisments", "Advertisment", "");                       
+                    }
+
+                    return View("ResultView");                
+            }      
             return View();
         }
 
+
+       private void InitializeResultView(bool result, string message, string action, string controller, string? nextAction)
+        {
+            ViewBag.Message = message + "\n";
+            ViewBag.Action = action;
+            ViewBag.Controller = controller;
+
+            if (result)
+            {
+                ViewBag.Title = "Success";
+                ViewBag.OperationResult = "Success";               
+                ViewBag.NextAction = nextAction;
+            }
+            else
+            {
+                ViewBag.Title = "Failed";
+                ViewBag.OperationResult = "Failed";
+            }
+
+        }
+        
 
         [HttpGet]
         public IActionResult CreateBikeAd()
@@ -214,10 +254,7 @@ namespace AdvertismentPlatform.Controllers
                 string uniqueFileName = null;
                 if (model.Picture != null)
                 {
-                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "AdvertismentPictures");
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    model.Picture.CopyTo(new FileStream(filePath, FileMode.Create));
+                    uniqueFileName = ProcessUploadedPhoto(model.Picture);
                 }
 
                 var user = await userManager.GetUserAsync(User);
@@ -248,36 +285,18 @@ namespace AdvertismentPlatform.Controllers
                     if (model.TopSpeed != null) ((BikeItem)(advertisment.Item)).TopSpeed = Int32.Parse(model.TopSpeed);
                     if (model.Picture != null)
                     {
-                        string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "AdvertismentPictures");
-                        uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        model.Picture.CopyTo(new FileStream(filePath, FileMode.Create));
-                    }
-                    advertisment.Picture = uniqueFileName;
-/*
-                    if (uniqueFileName != null)
-                    {
                         advertisment.Picture = uniqueFileName;
                     }
-*/
+
                     try
                     {
                         await advertismentRepository.Add(advertisment);
-
-                        ViewBag.Title = "Success";
-                        ViewBag.OperationResult = "Success";
-                        ViewBag.Message = "You have successfuly created a new article.\n";
-                        ViewBag.Action = "ListMyArticles";
-                        ViewBag.Controller = "Advertisment";
-                        ViewBag.NextAction = "my articles";
+                        InitializeResultView(true, "You have successfuly created a new article", "ListMyArticles", "Advertisment", "my articles");
+                       
                     }
                     catch (Exception e)
                     {
-                        ViewBag.Title = "Fail";
-                        ViewBag.OperationResult = "Failed to create new article";
-                        ViewBag.Message = "Try again \n";
-                        ViewBag.Action = "CreateCarAD";
-                        ViewBag.Controller = "Advertisment";
+                        InitializeResultView(true, "Failed to create new article", "CreateCarAD", "Advertisment", "");                        
                     }
 
                     return View("ResultView");
@@ -306,6 +325,16 @@ namespace AdvertismentPlatform.Controllers
             renderModel.CarTypes = types;
             renderModel.ProductAge = DateTime.Today;
             return renderModel;
+        }
+
+        private string ProcessUploadedPhoto(IFormFile photo)
+        {
+            string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "AdvertismentPictures");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+
+            return uniqueFileName;
         }
 
         private IActionResult RenderErrorView()

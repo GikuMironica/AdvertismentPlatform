@@ -16,6 +16,7 @@ namespace AdvertismentPlatform.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
         private readonly IEmailSender emailHandler;
@@ -27,10 +28,12 @@ namespace AdvertismentPlatform.Controllers
          *  SignInManager
          */
         public AccountController(UserManager<ApplicationUser> userManager,
+                                 RoleManager<IdentityRole> roleManager,
                                  SignInManager<ApplicationUser> signInManager,
                                  IConfiguration configuration)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             emailHandler = new EmailHandler(configuration);
@@ -318,7 +321,12 @@ namespace AdvertismentPlatform.Controllers
 
             if (result.Succeeded)
             {
-                return View();
+                var resultRole = await userManager.AddToRoleAsync(user, "User");
+                if (resultRole.Succeeded)
+                {
+                    return View();
+                }
+                
             }
             ViewBag.ErrorTitle = "Email cannot be confirmed";
             return View("Error");
