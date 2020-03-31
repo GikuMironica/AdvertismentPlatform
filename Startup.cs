@@ -43,6 +43,7 @@ namespace AdvertismentPlatform
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            
             services.AddDbContextPool<AppDbContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("adplatform")));
             
@@ -84,6 +85,9 @@ namespace AdvertismentPlatform
             services.AddScoped<IAdvertismentRepository, AdvertismentRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<DataProtectionPurposeStrings>();
+
+            services.AddCloudscribePagination();
+          
         }
 
 
