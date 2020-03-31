@@ -8,5 +8,7 @@ namespace AdvertismentPlatform.Models
     public interface IAdvertismentRepository : IRepository<Advertisment>
     {
         public Task<IEnumerable<Advertisment>> GetAllByUserId(string id);
+
+        public Task<IEnumerable<Advertisment>> GetForPageFormat(int pageSize=6, int pageNumber=1);
     }
 }
