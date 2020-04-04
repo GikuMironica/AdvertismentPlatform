@@ -1,4 +1,7 @@
 ﻿@model AdvertismentPlatform.ViewModels.BikeAndCarViewModel
+@using Microsoft.Extensions.Options
+@inject IOptions<AdvertismentPlatform.Security.RecaptchaSettings> GoogleRecaptcha
+
 @{
     ViewBag.Title = "Car Advertise";
 }
@@ -132,14 +135,15 @@
 </form>
 
 @section Scripts{
+
+    <script src="~/js/SyncDropDownListName.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key"></script>
     <script>
-            $(document).ready(function () {
-                $('.custom-file-input').on("change", function () {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).next('.custom-file-label').html(fileName);
-                });
-            }
-            );
+        grecaptcha.ready(function () {
+            grecaptcha.execute(@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key, { action: 'homepage' }).then(function (token) {
+                console.log(token);
+            });
+        });
     </script>
-       
+
 }
