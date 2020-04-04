@@ -40,6 +40,7 @@ namespace AdvertismentPlatform.ViewModels
         public string? Mileage { get; set; }
 
         [StringLength(3)]
+        [Display(Name = "Top Speed")]
         [RegularExpression(@"\d\d?\d?", ErrorMessage = "Must be a realistic number :)")]
         public string? TopSpeed { get; set; }
     }

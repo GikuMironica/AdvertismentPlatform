@@ -92,6 +92,10 @@ namespace AdvertismentPlatform.Controllers
         [HttpPost]
         public async  Task<IActionResult> CreateCarAd(BikeAndCarViewModel compositeModel)
         {
+
+            // reCaptcha
+
+
             if (ModelState.IsValid)
             {
                 var model = compositeModel.car;

@@ -80,16 +80,23 @@ namespace AdvertismentPlatform.Controllers
 
                     if (status)
                     {
-                        ViewBag.ErrorTitle = "Registration successful";
-                        ViewBag.ErrorMessage = "Before you can Login, please confirm your " +
-                            "email, by clicking on the confirmation link we have emailed you ";
+                        ViewBag.Title = "Successful";
+                        ViewBag.OperationResult = "Success";
+                        ViewBag.Message = "You have successfuly registered!\nBefore you can Login, please confirm your " +
+                            "email\n, by clicking on the confirmation link we have emailed you ";
+                        ViewBag.Controller = "Account";
+                        ViewBag.Action = "Login";
+                        ViewBag.NextAction = "Login";
                     } else
                     {
-                        ViewBag.ErrorTitle = "Registration failed";
-                        ViewBag.ErrorMessage = "The email you provided is invalid";
+                        ViewBag.Title = "Registration failed";
+                        ViewBag.OperationResult = "Registration failed";
+                        ViewBag.Message = "The email you provided is invalid";
+                        ViewBag.Controller = "Account";
+                        ViewBag.Action = "Register";
                     }
 
-                    return View("Error");
+                    return View("ResultView");
                 }
 
                 foreach(var error in result.Errors)
@@ -293,7 +300,7 @@ namespace AdvertismentPlatform.Controllers
 
                 // If we cannot find the user email we cannot continue
                 ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
-                ViewBag.ErrorMessage = "Please contact support on support-team@Advertismentplatform.com";
+                ViewBag.ErrorMessage = "Please contact support on advertismentplatform@gmail.com";
 
                 return View("Error");
             }

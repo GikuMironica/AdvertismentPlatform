@@ -9,6 +9,7 @@ using AdvertismentPlatform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using X.PagedList;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AdvertismentPlatform.Controllers
 {
@@ -17,30 +18,24 @@ namespace AdvertismentPlatform.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IAdvertismentRepository advertismentRepository;
         private readonly UserManager<ApplicationUser> userManager;
-        
+        private readonly IWebHostEnvironment iHostingEnvironment;
 
         public HomeController(ILogger<HomeController> logger, 
             IAdvertismentRepository advertismentRepository, 
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IWebHostEnvironment IHostingEnvironment)
         {
             _logger = logger;
             this.advertismentRepository = advertismentRepository;
             this.userManager = userManager;
+            iHostingEnvironment = IHostingEnvironment;
         }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Index2()
-        {
-            var advertisments = await advertismentRepository.GetAll();           
-            
-            return View(advertisments);
-        }
-
+              
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index(int? page)
         {
+           
             int pageSize = 8;
             var pageNumber = page ?? 1;
             var ads = await advertismentRepository.GetForPageFormat(pageSize, pageNumber);

@@ -129,15 +129,19 @@
     </div>
 
     <br />
+
+
+
+
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-success">Update</button>
         @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
         {
-            <a asp-action="Index" asp-controller="Home" class="btn btn-success">Back</a>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back</a>
         }
         else
         {
-            <a asp-action="MyAdvertisments" class="btn btn-success">Back</a>
+            <a asp-action="MyAdvertisments" class="btn btn-primary">Back</a>
         }
     </div>
 </form>
