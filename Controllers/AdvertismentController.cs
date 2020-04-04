@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AdvertismentPlatform.Models;
+using AdvertismentPlatform.Security;
 using AdvertismentPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -24,14 +25,17 @@ namespace AdvertismentPlatform.Controllers
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
         private readonly IAdvertismentRepository advertismentRepository;
+        private readonly GoogleRecaptchaService googleRecaptchaService;
 
         public AdvertismentController(IWebHostEnvironment IHostingEnvironment,
                                       UserManager<ApplicationUser> userManager,
-                                      IAdvertismentRepository repository)
+                                      IAdvertismentRepository repository,
+                                      GoogleRecaptchaService googleRecaptchaService)
         {
             hostingEnvironment = IHostingEnvironment;
             this.userManager = userManager;
             this.advertismentRepository = repository;
+            this.googleRecaptchaService = googleRecaptchaService;
             carModelsJsonPath = Path.Combine(hostingEnvironment.WebRootPath, "Resource", "CarTypes.json");
         }
 
@@ -82,19 +86,26 @@ namespace AdvertismentPlatform.Controllers
         }
 
 
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult CreateCarAd()
         {            
             return View(initializeCarModel());                        
         }
-
+*/
 
         [HttpPost]
         public async  Task<IActionResult> CreateCarAd(BikeAndCarViewModel compositeModel)
         {
 
-            // reCaptcha
+            // Google reCaptcha
+            var googleRecaptcha = googleRecaptchaService.VerifyRecaptcha(compositeModel.RecaptchaToken);
 
+            if(!googleRecaptcha.Result.success && googleRecaptcha.Result.score <= 0.5)
+            {
+                ModelState.AddModelError("", "Captcha failed, please try again");
+                compositeModel.car.CarTypes = initializeCarModel().CarTypes;
+                return View("CreateAdvertise", compositeModel);
+            }
 
             if (ModelState.IsValid)
             {
@@ -152,7 +163,7 @@ namespace AdvertismentPlatform.Controllers
                 }                 
             }
             compositeModel.car.CarTypes = initializeCarModel().CarTypes;
-            return View(compositeModel);
+            return View("CreateAdvertise", compositeModel);
         }
 
         [HttpGet]
@@ -219,19 +230,29 @@ namespace AdvertismentPlatform.Controllers
         }
                    
         
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult CreateBikeAd()
         {
             var model = new CreateBikeViewModel();
             model.ProductAge = DateTime.Today;
             return View(model);
-        }
-
+        }*/
 
 
         [HttpPost]
         public async Task<IActionResult> CreateBikeAd(BikeAndCarViewModel compositeModel)
         {
+
+            // Google reCaptcha
+            var googleRecaptcha = googleRecaptchaService.VerifyRecaptcha(compositeModel.RecaptchaToken);
+
+            if (!googleRecaptcha.Result.success && googleRecaptcha.Result.score <= 0.5)
+            {
+                ModelState.AddModelError("", "Captcha failed, please try again");
+                compositeModel.car = initializeCarModel();
+                return View("CreateAdvertise", compositeModel);
+            }
+
             if (ModelState.IsValid)
             {
                 var model = compositeModel.bike;
@@ -286,7 +307,8 @@ namespace AdvertismentPlatform.Controllers
                     return View("ResultView");
                 }
             }
-         return View(compositeModel);           
+            compositeModel.car = initializeCarModel();
+            return View("CreateAdvertise", compositeModel);           
         }
 
 

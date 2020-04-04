@@ -87,6 +87,8 @@ namespace AdvertismentPlatform
             services.AddSingleton<DataProtectionPurposeStrings>();
 
             services.AddCloudscribePagination();
+            services.Configure<RecaptchaSettings>(Configuration.GetSection("GoogleRECAPTCHA"));
+            services.AddTransient<GoogleRecaptchaService>();
           
         }
 
