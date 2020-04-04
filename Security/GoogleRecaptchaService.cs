@@ -17,7 +17,7 @@ namespace AdvertismentPlatform.Security
             this.settings = settings.Value;
         }
 
-        public virtual async Task<GoogleREspo> RecVer(string token)
+        public virtual async Task<GoogleREspo> VerifyRecaptcha(string token)
         {
             GooglereCaptchaData myData = new GooglereCaptchaData
             {
@@ -26,7 +26,7 @@ namespace AdvertismentPlatform.Security
             };
 
             HttpClient client = new HttpClient();
-            var response = await client.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?=secret{myData.secret}&response={myData.response}");
+            var response = await client.GetStringAsync($"https://www.google.com/recaptcha/api/siteverify?secret={myData.secret}&response={myData.response}");
 
             var capresp = JsonConvert.DeserializeObject<GoogleREspo>(response);
 

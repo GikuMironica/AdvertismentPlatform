@@ -1,4 +1,6 @@
 ﻿@model AdvertismentPlatform.ViewModels.BikeAndCarViewModel;
+@using Microsoft.Extensions.Options
+@inject IOptions<AdvertismentPlatform.Security.RecaptchaSettings> GoogleRecaptcha
 @{
     ViewBag.Title = "Create New Advertise";
 }
@@ -19,16 +21,17 @@
                     <a class="dropdown-item" onclick="toggle_visibility('carAnchor','Car');">Car</a>
                 </div>
             </div>
-
+            <div asp-validation-summary="All" class="text-danger"></div>
         </form>
     </div>
 </div>
 
 <br />
 
+
 <div id="bikeAnchor" class="card bg-light hideble p-1" style="display : none">
     <div class="card-body">
-        <partial name="~/Views/Advertisment/CreateBikeAd.cshtml" for="@Model" />
+        <partial name="~/Views/Advertisment/CreateBikeAd.cshtml" for="@Model"  />
     </div>
 </div>
 
@@ -39,6 +42,16 @@
     </div>
 </div>
 
+
+
 @section Scripts{
     <script src="~/js/ToggleElements.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key', { action: 'homepage' }).then(function (token) {
+                $('.RecaptchaToken').val(token);
+            });
+        });
+    </script>
 }

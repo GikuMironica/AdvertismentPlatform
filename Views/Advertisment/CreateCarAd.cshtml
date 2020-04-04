@@ -8,7 +8,7 @@
 
 <h2>Add Car</h2>
 <form enctype="multipart/form-data" method="post" asp-action="CreateCarAd">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    
     <div class="form-group row">
         <div class="col-2">
             <label asp-for="car.Brand"></label>
@@ -128,6 +128,9 @@
     </div>
 
     <br />
+    <input hidden class="RecaptchaToken" asp-for="RecaptchaToken" />
+   
+    <br />
     <div class="form-group">
         <input type="submit" class="btn btn-success" value="Create" />
         <a asp-action="CreateAdvertise" class="btn btn-primary">Back</a>
@@ -135,15 +138,6 @@
 </form>
 
 @section Scripts{
-
     <script src="~/js/SyncDropDownListName.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key"></script>
-    <script>
-        grecaptcha.ready(function () {
-            grecaptcha.execute(@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key, { action: 'homepage' }).then(function (token) {
-                console.log(token);
-            });
-        });
-    </script>
 
 }
