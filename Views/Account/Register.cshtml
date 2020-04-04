@@ -27,18 +27,19 @@
                 <input asp-for="ConfirmedPassword" class="form-control" />
                 <span asp-validation-for="ConfirmedPassword" class="text-danger"></span>
             </div>
+            <input hidden asp-for="RecaptchaToken" />
             <button type="submit" class="btn btn-primary ">Register</button>
         </form>
     </div>
 </div>
+
 
 @section Scripts{
     <script src="https://www.google.com/recaptcha/api.js?render=@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key"></script>
     <script>
         grecaptcha.ready(function () {
             grecaptcha.execute('@GoogleRecaptcha.Value.ReCAPTCHA_Site_Key', { action: 'homepage' }).then(function (token) {
-                console.log(token);
-
+                $('#RecaptchaToken').val(token);                
             });
         });
     </script>

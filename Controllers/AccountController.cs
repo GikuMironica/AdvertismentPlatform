@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AdvertismentPlatform.Handlers;
 using AdvertismentPlatform.Models;
+using AdvertismentPlatform.Security;
 using AdvertismentPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ namespace AdvertismentPlatform.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
+        private readonly GoogleRecaptchaService googleRecaptchaService;
         private readonly IEmailSender emailHandler;
 
         /**
@@ -30,12 +32,14 @@ namespace AdvertismentPlatform.Controllers
         public AccountController(UserManager<ApplicationUser> userManager,
                                  RoleManager<IdentityRole> roleManager,
                                  SignInManager<ApplicationUser> signInManager,
-                                 IConfiguration configuration)
+                                 IConfiguration configuration,
+                                 GoogleRecaptchaService googleRecaptchaService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            this.googleRecaptchaService = googleRecaptchaService;
             emailHandler = new EmailHandler(configuration);
         }
         
@@ -57,6 +61,16 @@ namespace AdvertismentPlatform.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+
+            // Google reCaptcha
+            var googleRecaptcha = googleRecaptchaService.VerifyRecaptcha(model.RecaptchaToken);
+
+            if (!googleRecaptcha.Result.success && googleRecaptcha.Result.score <= 0.5)
+            {
+                ModelState.AddModelError("", "Captcha failed, please try again");
+                return View(model);
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser{ Email = model.Email, UserName = model.Email };
