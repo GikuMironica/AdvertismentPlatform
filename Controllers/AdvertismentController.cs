@@ -27,16 +27,19 @@ namespace AdvertismentPlatform.Controllers
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
         private readonly IAdvertismentRepository advertismentRepository;
         private readonly IGoogleRecaptchaService googleRecaptchaService;
+        private readonly ICurrency currencyContainer;
 
         public AdvertismentController(IWebHostEnvironment IHostingEnvironment,
                                       UserManager<ApplicationUser> userManager,
                                       IAdvertismentRepository repository,
-                                      IGoogleRecaptchaService googleRecaptchaService)
+                                      IGoogleRecaptchaService googleRecaptchaService,
+                                      ICurrency currencyContainer)
         {
             hostingEnvironment = IHostingEnvironment;
             this.userManager = userManager;
             this.advertismentRepository = repository;
             this.googleRecaptchaService = googleRecaptchaService;
+            this.currencyContainer = currencyContainer;
             carModelsJsonPath = Path.Combine(hostingEnvironment.WebRootPath, "Resource", "CarTypes.json");
         }
 
@@ -48,8 +51,11 @@ namespace AdvertismentPlatform.Controllers
             BikeAndCarViewModel combinedModel = new BikeAndCarViewModel
             {
                 car = initializeCarModel(),
-                bike = model
+                bike = model,
+                Currencies = new SelectList(currencyContainer.GetCurrencyNameList())                
             };
+
+           
             return View(combinedModel);
         }
 
@@ -77,6 +83,7 @@ namespace AdvertismentPlatform.Controllers
             int adId = Int32.Parse(id);
             try
             {
+                
                 await advertismentRepository.Delete(adId);
                 return RedirectToAction("MyAdvertisments");
             }
@@ -105,6 +112,7 @@ namespace AdvertismentPlatform.Controllers
             {
                 ModelState.AddModelError("", "Captcha failed, please try again");
                 compositeModel.car.CarTypes = initializeCarModel().CarTypes;
+                compositeModel.Currencies = new SelectList(currencyContainer.GetCurrencyNameList());
                 return View("CreateAdvertise", compositeModel);
             }
 
@@ -140,7 +148,8 @@ namespace AdvertismentPlatform.Controllers
                             Doors = Int32.Parse(model.Doors),
                             Description = model.Description,
                             Seats = Int32.Parse(model.Seats),
-                            Mileage = Int32.Parse(model.Mileage)
+                            Mileage = Int32.Parse(model.Mileage),
+                            CurrencyId = currencyContainer.GetIdByName(model.CurrencyName)
                         },
                                                
                     };
@@ -163,6 +172,7 @@ namespace AdvertismentPlatform.Controllers
                     return View("ResultView");                    
                 }                 
             }
+            compositeModel.Currencies = new SelectList(currencyContainer.GetCurrencyNameList());
             compositeModel.car.CarTypes = initializeCarModel().CarTypes;
             return View("CreateAdvertise", compositeModel);
         }
@@ -251,6 +261,7 @@ namespace AdvertismentPlatform.Controllers
             {
                 ModelState.AddModelError("", "Captcha failed, please try again");
                 compositeModel.car = initializeCarModel();
+                compositeModel.Currencies = new SelectList(currencyContainer.GetCurrencyNameList());
                 return View("CreateAdvertise", compositeModel);
             }
 
@@ -282,7 +293,8 @@ namespace AdvertismentPlatform.Controllers
                             Price = Double.Parse(model.Price),
                             Brand = model.Brand,
                             ProductAge = model.ProductAge,
-                            Description = model.Description                           
+                            Description = model.Description,
+                            CurrencyId = currencyContainer.GetIdByName(model.CurrencyName)
                         }
                                                 
                     };
@@ -309,6 +321,7 @@ namespace AdvertismentPlatform.Controllers
                 }
             }
             compositeModel.car = initializeCarModel();
+            compositeModel.Currencies = new SelectList(currencyContainer.GetCurrencyNameList());
             return View("CreateAdvertise", compositeModel);           
         }
 

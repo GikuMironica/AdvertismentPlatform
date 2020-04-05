@@ -43,5 +43,8 @@ namespace AdvertismentPlatform.ViewModels
         [Display(Name = "Top Speed")]
         [Range(1,400, ErrorMessage = "Top speed field must be a realistic number :)")]
         public string? TopSpeed { get; set; }
+
+
+        public string CurrencyName { get; set; }
     }
 }

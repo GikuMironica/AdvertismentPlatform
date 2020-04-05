@@ -17,7 +17,7 @@
             <Input asp-for="car.Brand" class="form-control" />
             <span asp-validation-for="car.Brand" class="text-danger"></span>
         </div>
-        <div class="col-auto">
+        <div class="col-1">
             <label asp-for="car.Picture"></label>
         </div>
         <div class="col-3">
@@ -93,14 +93,14 @@
             <Input asp-for="car.Price" class="form-control" />
             <span asp-validation-for="car.Price" class="text-danger"></span>
         </div>
-        @* <div class="col-1">
-                <label asp-for="Currency"></label>
-            </div>
+        <div class="col-1">
+             <label asp-for="Currencies"></label>
+        </div>
 
-            <div class="col-2">
-                <select asp-for="Currency" asp-items="Model.Currencies" class="form-control"></select>
-                <span asp-validation-for="Currency" class="text-danger"></span>
-            </div> *@
+         <div class="col-2">
+              <select asp-for="car.CurrencyName" asp-items="Model.Currencies" class="form-control"></select>
+              <span asp-validation-for="car.CurrencyName" class="text-danger"></span>
+         </div> 
 
     </div>
 

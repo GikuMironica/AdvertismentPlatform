@@ -65,13 +65,13 @@ namespace AdvertismentPlatform
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
-                    options.ClientId = "824631466201-rsmg37ukppkgvr2i5d9r4tgjljpsc5gi.apps.googleusercontent.com";
-                    options.ClientSecret = "aaRirFRgJSIbJlkpYmWTYeix";
+                    options.ClientId = Configuration.GetSection("GoogleAUTH").GetSection("ClientID").Value;
+                    options.ClientSecret = Configuration.GetSection("GoogleAUTH").GetSection("ClientSecret").Value;
                 })
                 .AddFacebook(options =>
                 {
-                    options.AppId = "872704303179040";
-                    options.AppSecret = "e09b7365a46ec7b5f6c2fb4f1dc91b77";
+                    options.AppId = Configuration.GetSection("FacebookAUTH").GetSection("AppID").Value;
+                    options.AppSecret = Configuration.GetSection("FacebookAUTH").GetSection("AppSecret").Value;
                 });
 
             // Change all token lifetime to 10h 
@@ -90,7 +90,7 @@ namespace AdvertismentPlatform
             services.AddCloudscribePagination();
             services.Configure<RecaptchaSettings>(Configuration.GetSection("GoogleRECAPTCHA"));
             services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
-          
+            services.AddSingleton<ICurrency, CurrencyContainer>();
         }
 
 

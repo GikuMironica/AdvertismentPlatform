@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +14,8 @@ namespace AdvertismentPlatform.ViewModels
 
         [Required]
         public string RecaptchaToken { get; set; }
+
+        [Display(Name = "Currency")]
+        public SelectList Currencies { get; set; }
     }
 }

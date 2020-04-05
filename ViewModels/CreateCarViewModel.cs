@@ -56,5 +56,7 @@ namespace AdvertismentPlatform.ViewModels
         public string Mileage { get; set; }
 
         public SelectList CarTypes { get; set; }
+
+        public string CurrencyName { get; set; }
     }
 }
