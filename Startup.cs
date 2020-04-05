@@ -16,6 +16,7 @@ using AdvertismentPlatform.Models.MySqlRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AdvertismentPlatform.Security;
+using AdvertismentPlatform.Services;
 
 namespace AdvertismentPlatform
 {
@@ -88,7 +89,7 @@ namespace AdvertismentPlatform
 
             services.AddCloudscribePagination();
             services.Configure<RecaptchaSettings>(Configuration.GetSection("GoogleRECAPTCHA"));
-            services.AddTransient<GoogleRecaptchaService>();
+            services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
           
         }
 

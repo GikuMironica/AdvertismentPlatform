@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using AdvertismentPlatform.Services;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AdvertismentPlatform.Security
 {
-    public class GoogleRecaptchaService
+    public class GoogleRecaptchaService : IGoogleRecaptchaService
     {
         private RecaptchaSettings settings;
 

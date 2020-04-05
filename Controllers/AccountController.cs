@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AdvertismentPlatform.Handlers;
 using AdvertismentPlatform.Models;
 using AdvertismentPlatform.Security;
+using AdvertismentPlatform.Services;
 using AdvertismentPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@ namespace AdvertismentPlatform.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
-        private readonly GoogleRecaptchaService googleRecaptchaService;
+        private readonly IGoogleRecaptchaService googleRecaptchaService;
         private readonly IEmailSender emailHandler;
 
         /**
@@ -33,7 +34,7 @@ namespace AdvertismentPlatform.Controllers
                                  RoleManager<IdentityRole> roleManager,
                                  SignInManager<ApplicationUser> signInManager,
                                  IConfiguration configuration,
-                                 GoogleRecaptchaService googleRecaptchaService)
+                                 IGoogleRecaptchaService googleRecaptchaService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;

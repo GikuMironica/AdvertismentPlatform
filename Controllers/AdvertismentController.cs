@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AdvertismentPlatform.Models;
 using AdvertismentPlatform.Security;
+using AdvertismentPlatform.Services;
 using AdvertismentPlatform.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -25,12 +26,12 @@ namespace AdvertismentPlatform.Controllers
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
         private readonly IAdvertismentRepository advertismentRepository;
-        private readonly GoogleRecaptchaService googleRecaptchaService;
+        private readonly IGoogleRecaptchaService googleRecaptchaService;
 
         public AdvertismentController(IWebHostEnvironment IHostingEnvironment,
                                       UserManager<ApplicationUser> userManager,
                                       IAdvertismentRepository repository,
-                                      GoogleRecaptchaService googleRecaptchaService)
+                                      IGoogleRecaptchaService googleRecaptchaService)
         {
             hostingEnvironment = IHostingEnvironment;
             this.userManager = userManager;
