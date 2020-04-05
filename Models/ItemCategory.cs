@@ -12,17 +12,19 @@ namespace AdvertismentPlatform.Models
         public int Id { get; set; }
         public double? Price { get; set; }
 
-        #nullable enable
+        public int CurrencyId { get; set; }
+
+#nullable enable
         [MaxLength(50)]
         public string? Brand { get; set; }
 
         [MaxLength(500,ErrorMessage =" Description can contain maximum 500 characters")]
         [MinLength(20, ErrorMessage = " Description must contain maximum 20 characters")]
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public int AdvertismentId { get; set; }
-        public Advertisment Advertisment { get; set; }
+        public Advertisment? Advertisment { get; set; }
 
         [Display(Name = "Production year")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

@@ -18,8 +18,7 @@ namespace AdvertismentPlatform.ViewModels
 
         [Required]
         [StringLength(2)]
-        [Range(1, 60)]
-        [RegularExpression(@"^\d$", ErrorMessage = "Must be a number")]
+        [Range(1, 50, ErrorMessage = "The Seats field must be a realistic number")]
         public string Seats { get; set; }
 
         [Required]
@@ -28,12 +27,11 @@ namespace AdvertismentPlatform.ViewModels
 
         [Required]
         [StringLength(1)]
-        [Range(1,9)]
-        [RegularExpression(@"[\d]", ErrorMessage = "Never saw a car with that many doors, are you sure?")]
+        [RegularExpression(@"[\d]", ErrorMessage = "Doors field must be a number")]
         public string Doors { get; set; }
 
         [Required]
-        [RegularExpression(@"-?\d+(?:\.\d+)?", ErrorMessage = "Must be a double or integer")]
+        [RegularExpression(@"-?\d+(?:\.\d+)?", ErrorMessage = "Price field must be a double or integer")]
         public string Price { get; set; }
 
         [MaxLength(50)]
@@ -41,8 +39,8 @@ namespace AdvertismentPlatform.ViewModels
         [Required]
         public string Brand { get; set; }
 
-        [MaxLength(500, ErrorMessage = " Description can contain maximum 500 characters")]
-        [MinLength(20, ErrorMessage = " Description must contain maximum 20 characters")]
+        [MaxLength(500, ErrorMessage = " Description field can contain maximum 500 characters")]
+        [MinLength(20, ErrorMessage = " Description field must contain maximum 20 characters")]
         [Required]
         public string Description { get; set; }
 
@@ -54,9 +52,11 @@ namespace AdvertismentPlatform.ViewModels
 
         [StringLength(7)]
         [Required]
-        [RegularExpression(@"\d*", ErrorMessage = "Must be a number")]
+        [RegularExpression(@"\d*", ErrorMessage = "Mileage field must be a number")]
         public string Mileage { get; set; }
 
         public SelectList CarTypes { get; set; }
+
+        public string CurrencyName { get; set; }
     }
 }

@@ -1,25 +1,28 @@
-﻿@model AdvertismentPlatform.ViewModels.CreateCarViewModel
+﻿@model AdvertismentPlatform.ViewModels.BikeAndCarViewModel
+@using Microsoft.Extensions.Options
+@inject IOptions<AdvertismentPlatform.Security.RecaptchaSettings> GoogleRecaptcha
+
 @{
     ViewBag.Title = "Car Advertise";
 }
 
 <h2>Add Car</h2>
 <form enctype="multipart/form-data" method="post" asp-action="CreateCarAd">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Brand"></label>
+            <label asp-for="car.Brand"></label>
         </div>
         <div class="col-4">
-            <Input asp-for="Brand" class="form-control" />
-            <span asp-validation-for="Brand" class="text-danger"></span>
+            <Input asp-for="car.Brand" class="form-control" />
+            <span asp-validation-for="car.Brand" class="text-danger"></span>
         </div>
-        <div class="col-auto">
-            <label asp-for="Picture"></label>
+        <div class="col-1">
+            <label asp-for="car.Picture"></label>
         </div>
         <div class="col-3">
             <div class="custom-file">
-                <input asp-for="Picture" class="form-control custom-file-input">
+                <input asp-for="car.Picture" class="form-control custom-file-input">
                 <label class="custom-file-label">Choose Picture....</label>
             </div>
         </div>
@@ -27,118 +30,114 @@
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Car_Type"></label>
+            <label asp-for="car.Car_Type"></label>
         </div>
 
         <div class="col-4">
-            <select asp-for="Car_Type" asp-items="Model.CarTypes" class="form-control"></select>
-            <span asp-validation-for="Car_Type" class="text-danger"></span>
+            <select asp-for="car.Car_Type" asp-items="@Model.car.CarTypes" class="form-control"></select>
+            <span asp-validation-for="car.Car_Type" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="ProductAge"></label>
+            <label asp-for="car.ProductAge"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="ProductAge" type="date" id="today-date" class="form-control" />
-            <span asp-validation-for="ProductAge" class="text-danger"></span>
+            <Input asp-for="car.ProductAge" type="date" id="today-date" class="form-control" />
+            <span asp-validation-for="car.ProductAge" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Mileage"></label>
+            <label asp-for="car.Mileage"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Mileage" type="text" class="form-control" />
-            <span asp-validation-for="Mileage" class="text-danger"></span>
+            <Input asp-for="car.Mileage" type="text" class="form-control" />
+            <span asp-validation-for="car.Mileage" class="text-danger"></span>
         </div>
     </div>
 
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Doors"></label>
+            <label asp-for="car.Doors"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Doors" type="text" class="form-control" />
-            <span asp-validation-for="Doors" class="text-danger"></span>
+            <Input asp-for="car.Doors" type="text" class="form-control" />
+            <span asp-validation-for="car.Doors" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Seats"></label>
+            <label asp-for="car.Seats"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Seats" type="text" class="form-control" />
-            <span asp-validation-for="Seats" class="text-danger"></span>
+            <Input asp-for="car.Seats" type="text" class="form-control" />
+            <span asp-validation-for="car.Seats" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Price"></label>
+            <label asp-for="car.Price"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Price" class="form-control" />
-            <span asp-validation-for="Price" class="text-danger"></span>
+            <Input asp-for="car.Price" class="form-control" />
+            <span asp-validation-for="car.Price" class="text-danger"></span>
         </div>
-        @* <div class="col-1">
-                <label asp-for="Currency"></label>
-            </div>
+        <div class="col-1">
+             <label asp-for="Currencies"></label>
+        </div>
 
-            <div class="col-2">
-                <select asp-for="Currency" asp-items="Model.Currencies" class="form-control"></select>
-                <span asp-validation-for="Currency" class="text-danger"></span>
-            </div> *@
+         <div class="col-2">
+              <select asp-for="car.CurrencyName" asp-items="Model.Currencies" class="form-control"></select>
+              <span asp-validation-for="car.CurrencyName" class="text-danger"></span>
+         </div> 
 
     </div>
 
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Title"></label>
+            <label asp-for="car.Title"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
+            <Input asp-for="car.Title" class="form-control" />
+            <span asp-validation-for="car.Title" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Description"></label>
+            <label asp-for="car.Description"></label>
         </div>
 
         <div class="col-4">
-            <textarea asp-for="Description" class="form-control"></textarea>
+            <textarea asp-for="car.Description" class="form-control"></textarea>
+            <span asp-validation-for="car.Title" class="text-danger"></span>
         </div>
     </div>
 
     <br />
+    <input hidden class="RecaptchaToken" asp-for="RecaptchaToken" />
+   
+    <br />
     <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="Create" />
-        <a asp-action="CreateAdvertise" class="btn btn-success">Back</a>
+        <input type="submit" class="btn btn-success" value="Create" />
+        <a asp-action="CreateAdvertise" class="btn btn-primary">Back</a>
     </div>
 </form>
 
 @section Scripts{
-    <script>
-            $(document).ready(function () {
-                $('.custom-file-input').on("change", function () {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).next('.custom-file-label').html(fileName);
-                });
-            }
-            );
-    </script>
-       
+    <script src="~/js/SyncDropDownListName.js"></script>
+
 }

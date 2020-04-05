@@ -1,13 +1,14 @@
-﻿@model AdvertismentPlatform.Models.Advertisment;
-
+﻿@model AdvertismentPlatform.Models.Advertisment
+@inject AdvertismentPlatform.Services.ICurrency currencyContainer
 @{
     var path = "~/AdvertismentPictures/" + (Model.Picture ?? "qm.jpg");
     var date = Model.Item.ProductAge.ToString().Substring(0, 10);
 
     string actionName = this.ViewContext.RouteData.Values["action"].ToString();
     string controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-
+   
     string ItemType = "Edit"+Model.Item.GetType().Name;
+    Model.Currency = currencyContainer.GetCurrencyById(Model.Item.CurrencyId);
 }
 
 
@@ -16,7 +17,7 @@
         
         @* this is the image, Spans 3 rows, 2 colums*@
         <div class="col-2 ">
-            <img src="@path" style="width:100px; height:100px;" asp-append-version="true" />
+            <img src="@path" style="width:130px; height:110px;" asp-append-version="true" />
         </div>
 
         @* Here is the rest of the table spans 3 rows, 10 columns *@
@@ -24,27 +25,28 @@
 
             <div class="row">
                 <div class="col-3 ">@Model.Item.Brand</div>
-                <div class="col-2 text-center">@Model.Item.Price$ </div>
-                <div class="col-3 "><b>First Name:</b> @Model.ApplicationUser.FirstName</div>
+                <div class="col-2 text-center">@Model.Item.Price&nbsp;@Model.Currency.Sign</div>
+                <div class="col-3 "><i class="fas fa-user-alt"></i>&nbsp; @Model.ApplicationUser.FirstName&nbsp;@Model.ApplicationUser.LastName</div>
                 <div class="col-4 ">@Model.PostDate</div>
             </div>
 
             <div class="row">
                 <div class="col-3 "><b>Year: </b>@date</div>
                 <div class="col-2 "></div>
-                <div class="col-3 "><b>Phone:</b> @Model.ApplicationUser.PhoneNumber</div>
+                <div class="col-3 "><i class="fas fa-phone-alt"></i>&nbsp;@Model.ApplicationUser.PhoneNumber</div>
                 
             </div>
 
             <div class="row">
                 <div class="col-3 "><b>Mileage:</b> @Model.Item.Mileage</div>
                 <div class="col-2 "></div>
-                <div class="col-3 "></div>
+                <div class="col-3 "><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;@Model.ApplicationUser.City</div>
                 @if ((((actionName == "MyAdvertisments") && (controllerName == "Advertisment")) || (User.IsInRole("Admin") || User.IsInRole("Super Admin"))))
                 {
                     <div class="col-4 ">
 
-                        <form asp-action="DeleteAdvertisment" asp-route-id="@Model.Id" method="post">
+                        <form asp-action="DeleteAdvertisment" asp-controller="Advertisment" asp-route-id="@Model.Id"                
+                              method="post">
 
 
                             <a asp-action=@ItemType asp-controller="Advertisment" asp-route-id="@Model.Id" class="btn btn-secondary"><i class="fas fa-cog"></i></a>

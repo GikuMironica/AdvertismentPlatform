@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
+
 
 namespace AdvertismentPlatform.Models
 {
@@ -19,6 +21,7 @@ namespace AdvertismentPlatform.Models
         {
             return await context.Advertisments
                  .Include(ad => ad.Item)
+                 .Include(ad => ad.ApplicationUser)
                  .ToListAsync();
         } 
 
@@ -37,6 +40,16 @@ namespace AdvertismentPlatform.Models
                  .Include(advertisment => advertisment.ApplicationUser)
                  .Where(advertisment => advertisment.ApplicationUserId == id)
                  .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Advertisment>> GetForPageFormat(int pageSize = 6, int pageNumber = 1)
+        {
+            int ExcludeAds = (pageSize * pageNumber) - pageSize;
+
+            return await context.Advertisments
+                        .Include(ad => ad.ApplicationUser)
+                        .Include(ad => ad.Item)
+                        .ToPagedListAsync(pageNumber, pageSize);
         }
     }
 }

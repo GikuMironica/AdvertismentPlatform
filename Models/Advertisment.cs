@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdvertismentPlatform.Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,5 +27,8 @@ namespace AdvertismentPlatform.Models
         public ApplicationUser ApplicationUser { get; set; }
 
         public string ApplicationUserId { get; set; }
+
+        [NotMapped]
+        public Currency? Currency { get; set; }
     }
 }

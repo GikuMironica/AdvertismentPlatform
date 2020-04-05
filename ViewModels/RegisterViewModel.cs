@@ -22,5 +22,7 @@ namespace AdvertismentPlatform.ViewModels
             ErrorMessage = "Password and confirmed password don't match. ")]
         public string ConfirmedPassword { get; set; }
 
+        [Required]
+        public string RecaptchaToken { get; set; }
     }
 }

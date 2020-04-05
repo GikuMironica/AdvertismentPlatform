@@ -1,25 +1,26 @@
-﻿@model AdvertismentPlatform.ViewModels.CreateBikeViewModel
+﻿@model AdvertismentPlatform.ViewModels.BikeAndCarViewModel
+
 @{
     ViewBag.Title = "Bike Advertise";
 }
 
 <h2>Add Bike</h2>
 <form enctype="multipart/form-data" method="post" asp-action="CreateBikeAd">
-    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Brand"></label>
+            <label asp-for="bike.Brand"></label>
         </div>
         <div class="col-4">
-            <Input asp-for="Brand" class="form-control" />
-            <span asp-validation-for="Brand" class="text-danger"></span>
+            <Input asp-for="bike.Brand" class="form-control" />
+            <span asp-validation-for="bike.Brand" class="text-danger"></span>
         </div>
-        <div class="col-auto">
-            <label asp-for="Picture"></label>
+        <div class="col-1">
+            <label asp-for="bike.Picture"></label>
         </div>
         <div class="col-3">
             <div class="custom-file">
-                <input asp-for="Picture" class="form-control custom-file-input">
+                <input asp-for="bike.Picture" class="form-control custom-file-input">
                 <label class="custom-file-label">Choose Picture....</label>
             </div>
         </div>
@@ -27,94 +28,87 @@
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="ProductAge"></label>
+            <label asp-for="bike.ProductAge"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="ProductAge" type="date" class="form-control" />
-            <span asp-validation-for="ProductAge" class="text-danger"></span>
+            <Input asp-for="bike.ProductAge" type="date" class="form-control" />
+            <span asp-validation-for="bike.ProductAge" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Mileage"></label>
+            <label asp-for="bike.Mileage"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Mileage" type="text" class="form-control" />
-            <span asp-validation-for="Mileage" class="text-danger"></span>
+            <Input asp-for="bike.Mileage" type="text" class="form-control" />
+            <span asp-validation-for="bike.Mileage" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="TopSpeed"></label>
+            <label asp-for="bike.TopSpeed"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="TopSpeed" type="text" class="form-control" />
-            <span asp-validation-for="TopSpeed" class="text-danger"></span>
+            <Input asp-for="bike.TopSpeed" type="text" class="form-control" />
+            <span asp-validation-for="bike.TopSpeed" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Price"></label>
+            <label asp-for="bike.Price"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Price" class="form-control" />
-            <span asp-validation-for="Price" class="text-danger"></span>
+            <Input asp-for="bike.Price" class="form-control" />
+            <span asp-validation-for="bike.Price" class="text-danger"></span>
         </div>
-        @* <div class="col-1">
-                <label asp-for="Currency"></label>
-            </div>
+        <div class="col-1">
+             <label asp-for="Currencies"></label>
+        </div>
 
-            <div class="col-2">
-                <select asp-for="Currency" asp-items="Model.Currencies" class="form-control"></select>
-                <span asp-validation-for="Currency" class="text-danger"></span>
-            </div> *@
+        <div class="col-2">
+             <select asp-for="bike.CurrencyName" asp-items="Model.Currencies" class="form-control"></select>
+             <span asp-validation-for="bike.CurrencyName" class="text-danger"></span>
+        </div> 
     </div>
 
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Title"></label>
+            <label asp-for="bike.Title"></label>
         </div>
 
         <div class="col-4">
-            <Input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
+            <Input asp-for="bike.Title" class="form-control" />
+            <span asp-validation-for="bike.Title" class="text-danger"></span>
         </div>
     </div>
 
     <div class="form-group row">
         <div class="col-2">
-            <label asp-for="Description"></label>
+            <label asp-for="bike.Description"></label>
         </div>
 
         <div class="col-4">
-            <textarea asp-for="Description" class="form-control"></textarea>
+            <textarea asp-for="bike.Description" class="form-control"></textarea>
         </div>
     </div>
 
+    <input hidden class="RecaptchaToken" asp-for="RecaptchaToken" />
     <br />
     <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="Create" />
-        <a asp-action="CreateAdvertise" class="btn btn-success">Back</a>
+        <input type="submit" class="btn btn-success" value="Create" />
+        <a asp-action="CreateAdvertise" class="btn btn-primary">Back</a>
     </div>
 </form>
 
 @section Scripts{
-    <script>
-            $(document).ready(function () {
-                $('.custom-file-input').on("change", function () {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).next('.custom-file-label').html(fileName);
-                });
-            }
-            );
-    </script>
+    <script src="~/js/SyncDropDownListName.js"></script>
 
 }
