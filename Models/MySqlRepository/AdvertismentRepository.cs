@@ -39,6 +39,7 @@ namespace AdvertismentPlatform.Models
                  .Include(advertisment => advertisment.Item)
                  .Include(advertisment => advertisment.ApplicationUser)
                  .Where(advertisment => advertisment.ApplicationUserId == id)
+                 .OrderByDescending(ad => ad.PostDate)
                  .ToListAsync();
         }
 
@@ -49,6 +50,7 @@ namespace AdvertismentPlatform.Models
             return await context.Advertisments
                         .Include(ad => ad.ApplicationUser)
                         .Include(ad => ad.Item)
+                        .OrderByDescending(x => x.PostDate)
                         .ToPagedListAsync(pageNumber, pageSize);
         }
     }

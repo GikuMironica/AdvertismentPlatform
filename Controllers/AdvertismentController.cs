@@ -137,7 +137,7 @@ namespace AdvertismentPlatform.Controllers
                     Advertisment advertisment = new Advertisment
                     {
                         Title = model.Title,
-                        PostDate = DateTime.UtcNow,
+                        PostDate = DateTime.Now,
                         ApplicationUser = user,
                         Item = new AutoItem
                         {

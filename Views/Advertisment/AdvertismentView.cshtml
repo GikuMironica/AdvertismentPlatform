@@ -1,14 +1,36 @@
 ﻿@model AdvertismentPlatform.Models.Advertisment
 @inject AdvertismentPlatform.Services.ICurrency currencyContainer
 @{
+    // get the picture path of current post
     var path = "~/AdvertismentPictures/" + (Model.Picture ?? "qm.jpg");
     var date = Model.Item.ProductAge.ToString().Substring(0, 10);
 
+    // get the current controller , action method
     string actionName = this.ViewContext.RouteData.Values["action"].ToString();
     string controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-   
+
     string ItemType = "Edit"+Model.Item.GetType().Name;
     Model.Currency = currencyContainer.GetCurrencyById(Model.Item.CurrencyId);
+
+    // calculate the time elapsed since post;
+    string postDate = "";
+
+    TimeSpan span = System.DateTime.Now.Subtract(Model.PostDate);
+    if (span.TotalSeconds < 3600)
+    {
+        if (span.TotalSeconds < 60)
+            postDate = "1 minute ago";
+        else
+            postDate = Convert.ToInt32(span.TotalMinutes) + "m ago";
+    }
+    else if (span.TotalHours < 24)
+        postDate = Convert.ToInt32(span.TotalHours) + "h ago";
+    else if (span.TotalDays < 31)
+        postDate = Convert.ToInt32(span.TotalDays) + "d ago";
+    else if (span.TotalDays < 365)
+        postDate = Convert.ToInt32(span.TotalDays / 30) + "m ago";
+    else
+        postDate = Convert.ToInt32(span.TotalDays / 365) + "y ago";
 }
 
 
@@ -27,7 +49,7 @@
                 <div class="col-3 ">@Model.Item.Brand</div>
                 <div class="col-2 text-center">@Model.Item.Price&nbsp;@Model.Currency.Sign</div>
                 <div class="col-3 "><i class="fas fa-user-alt"></i>&nbsp; @Model.ApplicationUser.FirstName&nbsp;@Model.ApplicationUser.LastName</div>
-                <div class="col-4 ">@Model.PostDate</div>
+                <div class="col-4 ">@postDate</div>
             </div>
 
             <div class="row">
