@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using X.PagedList;
 using Microsoft.AspNetCore.Hosting;
+using System.Globalization;
 
 namespace AdvertismentPlatform.Controllers
 {
@@ -39,10 +40,16 @@ namespace AdvertismentPlatform.Controllers
             int pageSize = 8;
             var pageNumber = page ?? 1;
             var ads = await advertismentRepository.GetForPageFormat(pageSize, pageNumber);
-          
+           
             return View(ads);
         }
 
-      
+        [HttpGet]
+        public async Task<ActionResult> ViewAdvertisment(int advId)
+        {
+            var advertisment = await advertismentRepository.GetById(advId);
+            return View(advertisment);
+        }
+
     }
 }
