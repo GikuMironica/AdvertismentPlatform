@@ -9,12 +9,27 @@
 <br />
 <br />
 
-<div class="text-center">
-    <div class="text-right">
+<div class="row text-center">
+    <div class="col-3">
+
+    </div>
+    <div class="col">
+        <form >
+            <div class="input-group">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">
+                        <i class="fa fa-search" style="color: white;"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+        </form>
+    </div>
+    <div class="col-auto text-right">
         <a asp-action="CreateAdvertise" asp-controller="Advertisment" class="btn btn-primary"><i class="fas fa-bullhorn"></i>&nbsp;&nbsp;Create Advertise</a>
     </div>
-    <hr />
 </div>
+<br />
 
 @if (!Model.Any())
 {
@@ -24,37 +39,43 @@
 else
 {
 
-    <div class="card ">
+    <div class="row">
+        <div class="col-3">
 
-        <div class="card-header bg-dark text-light mb-1">
-            <div class="row">
-                <div class="col-2"><b>Photo</b></div>
-                <div class="col-3 "><b>Item Details</b></div>
-                <div class="col-1 "><b>Price</b></div>
-                <div class="col-3 "><b>&nbsp;&nbsp;&nbsp;Seller Info</b></div>
-                <div class="col-3 "><b>Post Time</b></div>
+        </div>
+        <div class="col">
+            <div class="card">
 
+                <div class="card-header bg-dark text-light mb-1">
+                    <div class="row">
+                        <div class="col-2"><b>Photo</b></div>
+                        <div class="col-3 "><b>Item Details</b></div>
+                        <div class="col-2 text-center"><b>Price</b></div>
+                        <div class="col text-center"><b>Post Time</b></div>
+
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @foreach (var currentModel in Model)
+                    {
+                        <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
+                    }
+                    <br />
+
+                </div>
+
+                <div class="card-footer">
+                    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
+                                             new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
+                                             {
+                                                 DisplayItemSliceAndTotal = false,
+                                                 ContainerDivClasses = new[] { "navigation" },
+                                                 LiElementClasses = new[] { "page-item" },
+                                                 PageClasses = new[] { "page-link" },
+                                             })
+                </div>
             </div>
-        </div>
-
-        <div class="card-body">
-            @foreach (var currentModel in Model)
-            {
-                <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" /> 
-            }
-            <br />
-
-        </div>
-
-        <div class="card-footer">
-           @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
-                                    new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
-                                    {
-                                        DisplayItemSliceAndTotal = false,
-                                        ContainerDivClasses = new[] { "navigation" },
-                                        LiElementClasses = new[] { "page-item" },
-                                        PageClasses = new[] { "page-link" },
-                                    })
         </div>
     </div>
 
@@ -65,7 +86,7 @@ else
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('ul.pagination > li.disabled > a').addClass('page-link');       
+            $('ul.pagination > li.disabled > a').addClass('page-link');
             $('ul.pagination > li.active > span').addClass('bg-dark text-white');
         });
     </script>

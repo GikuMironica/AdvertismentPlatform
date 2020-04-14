@@ -4,7 +4,7 @@
 @{
     // get the picture path of current post
     var path = "~/AdvertismentPictures/" + (Model.Picture ?? "qm.jpg");
-    var date = Model.Item.ProductAge.ToString().Substring(0, 10);
+    var date = Model.Item.ProductAge.ToString().Substring(6, 4);
 
     // get the current controller , action method
     string actionName = this.ViewContext.RouteData.Values["action"].ToString();
@@ -59,23 +59,18 @@
         <div class="col" style="cursor: pointer;" onclick="ViewAd(@Model.Id)">
 
             <div class="row">
-                <div class="col">@Model.Item.Brand</div>
-                <div class="col-2 text-center">@price&nbsp;@Model.Currency.Sign</div>
-                <div class="col"><i class="fas fa-user-alt"></i>&nbsp; @Model.ApplicationUser.FirstName&nbsp;@Model.ApplicationUser.LastName</div>
-
+                <div class="col"><b>@Model.Item.Brand</b></div>
+                <div class="col"><b>@price&nbsp;@Model.Currency.Sign</b></div>
             </div>
 
             <div class="row">
-                <div class="col"><b>Year: </b>@date</div>
-                <div class="col-2"></div>
-                <div class="col"><i class="fas fa-phone-alt"></i>&nbsp;@Model.ApplicationUser.PhoneNumber</div>
-
+                <div class="col">Year: @date</div>
+                <div class="col-2"></div>              
             </div>
            
             <div class="row">
-                <div class="col "><b>Mileage:</b> @mileage km</div>
+                <div class="col ">Mileage: @mileage km</div>
                 <div class="col-2"></div>
-                <div class="col"><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;@Model.ApplicationUser.City</div>
 
             </div>
         </div>
