@@ -1,1 +1,100 @@
 ﻿@model AdvertismentPlatform.Models.Advertisment
+@using System.Globalization
+@inject AdvertismentPlatform.Services.ICurrency currencyContainer
+
+@{
+    var itemView = "~/Views/Home/PartialView" + Model.Item.GetType().Name + ".cshtml";
+
+    var f = new NumberFormatInfo { NumberGroupSeparator = " " };
+    string priceStr = Model.Item.Price.Value.ToString("N", f);
+    var price = priceStr.Remove(priceStr.Length - 3, 3);
+
+    var path = "~/AdvertismentPictures/" + (Model.Picture ?? "qm.jpg");
+
+    Model.Currency = currencyContainer.GetCurrencyById(Model.Item.CurrencyId);    
+}
+
+<br />
+<br />
+
+
+<div class="row">
+
+    @*Left side*@
+    <div class="col">
+
+        @*Image card*@
+        <div class="row d-flex bd-highlight">
+            <div class="card shadow rounded flex-grow-1 bd-highlight">
+
+                <div class="card-header bg-dark text-light">
+                    <h5><b>@Model.Item.Brand &nbsp;&nbsp;&nbsp;@price @Model.Currency.Sign&nbsp;&nbsp;&nbsp;@Model.Title</b></h5>
+                </div>
+
+                <div class="card-body text-center">
+                    <img src="@path" style="max-width:100%; max-height: 500px; " asp-append-version="true" />
+                </div>
+
+            </div>
+        </div>
+
+        <br />
+
+        @*Description*@
+        <div class="row d-flex bd-highlight">
+
+            <div class="card shadow rounded flex-grow-1 bd-highlight">
+
+                <div class="card-body">
+                    <b>Description</b>
+                    <hr />
+                    <p class="text-muted">
+                        @Model.Item.Description
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br />
+
+        @*Include partial view depending on item type*@
+        <div class="row d-flex bd-highlight">
+
+            <div class="card shadow rounded flex-grow-1 bd-highlight">
+
+                <div class="card-body">
+                    <b>Technical Data</b>
+                    <hr />
+
+                    <partial name=@itemView for="@Model.Item"/>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @*right side*@
+    <div class="col-4">
+        <div class="card shadow rounded">
+
+            <div class="card-header bg-dark text-light mb-1">
+                <h5><b>Seller Contact</b></h5>
+            </div>
+            <div class="card-body">
+                <p><i class="fas fa-user-alt"></i>&nbsp;@Model.ApplicationUser.FirstName&nbsp;@Model.ApplicationUser.LastName</p>
+                <p><i class="fas fa-phone-alt"></i>&nbsp;@Model.ApplicationUser.PhoneNumber</p>
+                <p><i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;@Model.ApplicationUser.City</p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+

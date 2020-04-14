@@ -9,79 +9,117 @@
 <br />
 <br />
 
-<div class="row text-center">
-    <div class="col-3">
+<div class="row ">
 
-    </div>
-    <div class="col">
-        <form >
-            <div class="input-group">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fa fa-search" style="color: white;"></i>
-                    </button>
+    @*Left Side*@
+    <div class="col-3">
+        <div class="card shadow rounded">
+
+            <div class="card-header bg-dark text-light mb-1">
+                <div class="text-center">
+                    <b>Filter By</b>
                 </div>
-                <input type="text" class="form-control" placeholder="Search">
             </div>
-        </form>
+
+            <div class="card-body">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+
+        </div>                   
     </div>
-    <div class="col-auto text-right">
-        <a asp-action="CreateAdvertise" asp-controller="Advertisment" class="btn btn-primary"><i class="fas fa-bullhorn"></i>&nbsp;&nbsp;Create Advertise</a>
+
+    @*Right Side*@
+    <div class="col ">
+
+        @*NavBar and Create button*@
+        <div class="row">
+            <div class="col">
+                <form>
+                    <div class="input-group shadow rounded">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fa fa-search" style="color: white;"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                </form>
+            </div>
+            <div class="col-auto text-right">
+                <a asp-action="CreateAdvertise" asp-controller="Advertisment" class="btn btn-primary"><i class="fas fa-bullhorn"></i>&nbsp;&nbsp;Create Advertise</a>
+            </div>
+        </div>
+        <br />
+
+        @*Main Card*@
+        @if (!Model.Any())
+        {
+            <h2>There are no active ads currently.</h2>
+            <h5>You can create some <a asp-action="CreateAdvertise" class="text-success">Here</a></h5>
+        }
+        else
+        {
+            <div class="row">
+            
+                <div class="col">
+                    <div class="card shadow rounded">
+
+                        <div class="card-header bg-dark text-light mb-1">
+                            <div class="row">
+                                <div class="col-2"></div>
+                                <div class="col-3 "><b>Item Details</b></div>
+                                <div class="col-2 text-center"><b>Price</b></div>
+                                <div class="col text-center"><b>Post Time</b></div>
+
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            @for (int i = 0; i < Model.Count() - 1; i++)
+                            {
+                                var currentModel = Model.ElementAt(i);
+                                <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
+                                <hr />
+                                if (Model.Count() - i == 2)
+                                {
+                                    currentModel = Model.ElementAt(i+1);
+                                    <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
+                                }
+                            }
+
+                            <br />
+
+                        </div>
+
+                        <div class="card-footer">
+                            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
+                                                     new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
+                                                     {
+                                                         DisplayItemSliceAndTotal = false,
+                                                         ContainerDivClasses = new[] { "navigation" },
+                                                         LiElementClasses = new[] { "page-item" },
+                                                         PageClasses = new[] { "page-link" },
+                                                     })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
 <br />
 
-@if (!Model.Any())
-{
-    <h2>There are no active ads currently.</h2>
-    <h5>You can create some <a asp-action="CreateAdvertise" class="text-success">Here</a></h5>
-}
-else
-{
-
-    <div class="row">
-        <div class="col-3">
-
-        </div>
-        <div class="col">
-            <div class="card">
-
-                <div class="card-header bg-dark text-light mb-1">
-                    <div class="row">
-                        <div class="col-2"><b>Photo</b></div>
-                        <div class="col-3 "><b>Item Details</b></div>
-                        <div class="col-2 text-center"><b>Price</b></div>
-                        <div class="col text-center"><b>Post Time</b></div>
-
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    @foreach (var currentModel in Model)
-                    {
-                        <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
-                    }
-                    <br />
-
-                </div>
-
-                <div class="card-footer">
-                    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
-                                             new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
-                                             {
-                                                 DisplayItemSliceAndTotal = false,
-                                                 ContainerDivClasses = new[] { "navigation" },
-                                                 LiElementClasses = new[] { "page-item" },
-                                                 PageClasses = new[] { "page-link" },
-                                             })
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-}
 
 @section Scripts {
     <script>
