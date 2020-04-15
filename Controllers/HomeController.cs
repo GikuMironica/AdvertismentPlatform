@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using X.PagedList;
 using Microsoft.AspNetCore.Hosting;
 using System.Globalization;
+using AdvertismentPlatform.Filter.Base;
 
 namespace AdvertismentPlatform.Controllers
 {
@@ -34,15 +35,26 @@ namespace AdvertismentPlatform.Controllers
               
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index(int? page)
-        {
-           
+        public async Task<IActionResult> Index(int? page, string? search = null)
+        {           
             int pageSize = 8;
             var pageNumber = page ?? 1;
             var ads = await advertismentRepository.GetForPageFormat(pageSize, pageNumber);
            
             return View(ads);
         }
+
+    /*    [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(IEnumerable<ICriteria>? criterias, int? page)
+        {
+
+            int pageSize = 8;
+            var pageNumber = page ?? 1;
+            var ads = await advertismentRepository.GetForPageFormat(pageSize, pageNumber);
+
+            return View(ads);
+        }*/
 
         [HttpGet("Home/ViewAdvertisment/{advId}")]
         [AllowAnonymous]

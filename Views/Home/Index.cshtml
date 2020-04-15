@@ -5,6 +5,7 @@
 
 @{
     ViewBag.Title = "Home Page";
+    var query = "";
 }
 <br />
 <br />
@@ -45,14 +46,15 @@
         @*NavBar and Create button*@
         <div class="row">
             <div class="col">
-                <form>
+                <form method="get" action="@Url.Action("Index", "Home")">
                     <div class="input-group shadow rounded">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-primary" type="submit">
                                 <i class="fa fa-search" style="color: white;"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control" placeholder="Search">
+
+                        <input id="query" name="search" type="text" class="form-control" placeholder="Search">
                     </div>
                 </form>
             </div>
@@ -126,9 +128,11 @@
         $(document).ready(function () {
             $('ul.pagination > li.disabled > a').addClass('page-link');
             $('ul.pagination > li.active > span').addClass('bg-dark text-white');
+
+
         });
     </script>
-
+      
     <script>
         function ViewAd(id) {
             window.location.href = '/Home/ViewAdvertisment/' + id;

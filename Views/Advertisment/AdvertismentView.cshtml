@@ -77,7 +77,7 @@
         <div class="col-3">
 
             <div class="row" style="cursor: pointer;" onclick="ViewAd(@Model.Id)">
-                <div class="col" style="cursor: pointer;" onclick="ViewAd(@Model.Id)">@postDate</div>
+                <div class="col" >@postDate</div>
             </div>
 
             @if ((((actionName == "MyAdvertisments") && (controllerName == "Advertisment")) || (User.IsInRole("Admin") || User.IsInRole("Super Admin"))))
@@ -90,11 +90,15 @@
 
                             <a asp-action=@ItemType asp-controller="Advertisment" asp-route-id="@Model.Id" class="btn btn-secondary"><i class="fas fa-cog"></i></a>
 
-                            <span id="confirmDeleteSpan_@Model.Id" style="display:none">
-                                <span>Confirm</span>
-                                <button type="submit" class="btn btn-danger">Yes</button>
-                                <a href="#deleteSpan_@Model.Id" class="btn btn-primary"
-                                   onclick="confirmDelete('@Model.Id', false)">No</a>
+                            <span id="confirmDeleteSpan_@Model.Id" style="display:none" class="text-right">
+                                <span>Confirm</span>                                   
+                                   <button type="submit" class="btn btn-danger">Yes</button>                                     
+                                   <div class="row">
+                                       <div class="col pr-4">
+                                           <a href="#deleteSpan_@Model.Id" class="btn btn-primary mt-2"
+                                              onclick="confirmDelete('@Model.Id', false)">No</a>&nbsp;&nbsp;
+                                       </div>
+                                   </div>                            
                             </span>
 
                             <span id="deleteSpan_@Model.Id">
