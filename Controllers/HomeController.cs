@@ -44,10 +44,12 @@ namespace AdvertismentPlatform.Controllers
             return View(ads);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> ViewAdvertisment(int advId)
+        [HttpGet("Home/ViewAdvertisment/{advId}")]
+        [AllowAnonymous]
+
+        public async Task<ActionResult> ViewAdvertisment(string advId)
         {
-            var advertisment = await advertismentRepository.GetById(advId);
+            var advertisment = await advertismentRepository.GetById(Int32.Parse(advId));
             return View(advertisment);
         }
 

@@ -1,0 +1,69 @@
+﻿@model AutoItem
+@using System.Globalization
+@inject AdvertismentPlatform.Services.ICurrency currencyContainer
+@{
+    var f = new NumberFormatInfo { NumberGroupSeparator = " " };
+    string priceStr = Model.Price.Value.ToString("N", f);
+    var price = priceStr.Remove(priceStr.Length - 3, 3);
+    string kmStr = Model.Mileage.Value.ToString("N", f);
+    var mileage = kmStr.Remove(kmStr.Length - 3, 3);
+
+    var currency = currencyContainer.GetCurrencyById(Model.CurrencyId).Sign;
+}
+
+<div class="row">
+    <div class="col">
+        <b>Price:</b>
+    </div>
+    <div class="col">
+        @price @currency
+    </div>
+</div>
+
+<br />
+
+<div class="row mb-1">
+    <div class="col">
+        <b>Category:</b>
+    </div>
+    <div class="col">
+        @Model.Car_Type
+    </div>
+</div>
+
+<div class="row mb-1">
+    <div class="col">
+        <b>Mileage:</b>
+    </div>
+    <div class="col">
+        @mileage km
+    </div>
+</div>
+
+<div class="row mb-1">
+    <div class="col">
+        <b>Year:</b>
+    </div>
+    <div class="col">
+        @Model.ProductAge.ToString().Substring(6, 4)
+    </div>
+</div>
+
+<div class="row mb-1">
+    <div class="col">
+        <b>Doors:</b>
+    </div>
+    <div class="col">
+        @Model.Doors
+    </div>
+</div>
+
+<div class="row mb-1">
+    <div class="col">
+        <b>Seats:</b>
+    </div>
+    <div class="col">
+        @Model.Seats
+    </div>
+</div>
+
