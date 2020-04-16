@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
@@ -43,13 +44,16 @@ namespace AdvertismentPlatform.Models
                  .ToListAsync();
         }
 
-        public async Task<IEnumerable<Advertisment>> GetForPageFormat(int pageSize = 6, int pageNumber = 1)
+        public async Task<IEnumerable<Advertisment>> GetForPageFormat(int pageSize, int pageNumber, string? search)
         {
             int ExcludeAds = (pageSize * pageNumber) - pageSize;
 
             return await context.Advertisments
                         .Include(ad => ad.ApplicationUser)
                         .Include(ad => ad.Item)
+                        .Where(ad => ad.Title.IndexOf(search, StringComparison.OrdinalIgnoreCase) != -1
+                            || ad.Item.Brand.IndexOf(search, StringComparison.OrdinalIgnoreCase) != -1 
+                            || ad.Item.Description.IndexOf(search, StringComparison.OrdinalIgnoreCase) != -1 )
                         .OrderByDescending(x => x.PostDate)
                         .ToPagedListAsync(pageNumber, pageSize);
         }

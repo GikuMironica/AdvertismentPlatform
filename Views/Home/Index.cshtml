@@ -46,7 +46,7 @@
         @*NavBar and Create button*@
         <div class="row">
             <div class="col">
-                <form method="get" action="@Url.Action("Index", "Home")">
+                <form method="get" autocomplete="off" action="@Url.Action("Index", "Home")">
                     <div class="input-group shadow rounded">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit">
@@ -68,7 +68,7 @@
         @if (!Model.Any())
         {
             <h2>There are no active ads currently.</h2>
-            <h5>You can create some <a asp-action="CreateAdvertise" class="text-success">Here</a></h5>
+            <h5>You can create some</h5>
         }
         else
         {
@@ -93,13 +93,11 @@
                                 var currentModel = Model.ElementAt(i);
                                 <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
                                 <hr />
-                                if (Model.Count() - i == 2)
-                                {
-                                    currentModel = Model.ElementAt(i+1);
-                                    <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@currentModel" />
-                                }
                             }
-
+                            @{
+                                var lastModel = Model.Last();
+                                <partial name="~/Views/Advertisment/AdvertismentView.cshtml" for="@lastModel" />
+                            }
                             <br />
 
                         </div>

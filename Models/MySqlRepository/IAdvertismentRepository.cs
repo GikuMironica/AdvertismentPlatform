@@ -9,6 +9,6 @@ namespace AdvertismentPlatform.Models
     {
         public Task<IEnumerable<Advertisment>> GetAllByUserId(string id);
 
-        public Task<IEnumerable<Advertisment>> GetForPageFormat(int pageSize=6, int pageNumber=1);
+        public Task<IEnumerable<Advertisment>> GetForPageFormat(int pageSize, int pageNumber, string? search);
     }
 }
