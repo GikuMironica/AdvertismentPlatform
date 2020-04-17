@@ -1,43 +1,185 @@
 ﻿@model IEnumerable<Advertisment>
 
-@using X.PagedList.Mvc.Core;
-@using X.PagedList;
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using Microsoft.AspNetCore.Http
 
 @{
     ViewBag.Title = "Home Page";
-    var query = "";
+    var ok = false;
+    var queryString = Context.Request.Query;
+    var selectedItemType = 0;
 }
 <br />
 <br />
 
 <div class="row ">
-
-    @*Left Side*@
+                                            
+    @*Left Side*@                           
     <div class="col-3">
         <div class="card shadow rounded">
 
-            <div class="card-header bg-dark text-light mb-1">
+            <div class="card-header bg-dark text-white">
                 <div class="text-center">
-                    <b>Filter By</b>
+                    <b>Filter by</b>
                 </div>
             </div>
+            <div class="card-body p-0 pt-2 pb-2 mt-1 mb-1 text-center">
 
-            <div class="card-body">
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+                <form method="get" autocomplete="off" action="@Url.Action("Index", "Home")">
+                    <div class="form-group">
+
+                        <div class="types shadow">
+                            <div class="Categories row text-center">
+                                <label class="col"><i class="fas fa-car-side fa-2x"></i></label>
+
+                                <label class="col"><i class="fas fa-motorcycle fa-2x"></i></label>
+                            </div>
+                            <div class="Categories row text-center">
+                                <div class="col">
+                                    @{ if (queryString["itemType"] == "1") { ok = true; selectedItemType = 1; } else ok = false; }
+                                    <input type="radio" name="itemType" value="1" checked="@ok" />
+                                </div>
+                                <div class="col">
+                                    @{ if (queryString["itemType"] == "2") { ok = true; selectedItemType = 2; } else ok = false; }
+                                    <input type="radio" name="itemType" value="2" checked="@ok" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group pl-2 pr-2 pt-2 pb-3 text-left shadow ">
+                        @*Price*@
+                        @{
+                            var fromQueryPrice = Context.Request.Query["fromPrice"].ToString();
+                            var toQueryPrice = Context.Request.Query["toPrice"].ToString();
+                            if (fromQueryPrice.Length > 0 && toQueryPrice.Length > 0)
+                            {
+                                if (Int32.Parse(fromQueryPrice) > Int32.Parse(toQueryPrice))
+                                {
+                                    var x = fromQueryPrice;
+                                    fromQueryPrice = toQueryPrice;
+                                    toQueryPrice = x;
+                                }
+                            }
+
+                        }
+                        <div class="row ">
+                            <div class="col">
+                                <b>Price(€):</b>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input class="form-control" name="fromPrice" value="@fromQueryPrice" placeholder="from" type="number" />
+                            </div>
+                            <div class="col">
+                                <input class="form-control" name="toPrice" value="@toQueryPrice" placeholder="to" type="number" />
+                            </div>
+                        </div>
+
+                        @*Year*@
+                        <div class="row ">
+                            <div class="col">
+                                <b>Year:</b>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                @{ var fromQueryYear = Context.Request.Query["fromYear"].ToString();
+                                    var toQueryYear = Context.Request.Query["toYear"].ToString();
+                                    var year = DateTime.UtcNow.Year;
+                                    var FromYear = DateTime.UtcNow.Year;
+                                    var ToYear = DateTime.UtcNow.Year;
+                                    if (!(fromQueryYear.Length == 0))
+                                    {
+                                        FromYear = int.Parse(fromQueryYear);
+                                    }
+                                    if (!(toQueryYear.Length == 0))
+                                    {
+                                        ToYear = int.Parse(toQueryYear);
+                                    }
+
+                                    if (FromYear > ToYear)
+                                    {
+                                        var x = ToYear;
+                                        ToYear = FromYear;
+                                        FromYear = x;
+                                    }
+                                }
+                                <select name="fromYear" class="custom-select">
+                                    <option selected value="1900">1900</option>
+                                    @for (int i = year; i > 1980; i--)
+                                    {
+                                        <option value="@i">@i</option>
+
+                                    }
+                                    @for (int i = 1980; i >= 1901; i = i - 5)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select name="toYear" class="custom-select">
+                                    <option selected value="@ToYear">@ToYear</option>
+                                    @for (int i = year; i > 1980; i--)
+                                    {
+                                        @if (i != ToYear)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    }
+                                    @for (int i = 1980; i >= 1900; i = i - 5)
+                                    {
+                                        @if (i != ToYear)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        @*Mileage*@
+                        @{
+                            var fromQueryMileage = Context.Request.Query["fromMileage"].ToString();
+                            var toQueryMileage = Context.Request.Query["toMileage"].ToString();
+                            if (fromQueryMileage.Length > 0 && toQueryMileage.Length > 0)
+                            {
+                                if (Int32.Parse(fromQueryMileage) > Int32.Parse(toQueryMileage))
+                                {
+                                    var x2 = fromQueryMileage;
+                                    fromQueryMileage = toQueryMileage;
+                                    toQueryMileage = x2;
+                                }
+                            }
+
+                        }
+                        <div class="row ">
+                            <div class="col">
+                                <b>Mileage:</b>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col">
+                                <input class="form-control" name="fromMileage" value="@fromQueryMileage" placeholder="from" type="number" />
+                            </div>
+                            <div class="col">
+                                <input class="form-control" name="toMileage" value="@toQueryMileage" placeholder="to" type="number" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                </form>
+                <p>@{var rez = ((IPagedList)(Model)).TotalItemCount;}@rez results</p>
+                
             </div>
 
-        </div>                   
+        </div>
     </div>
 
     @*Right Side*@
@@ -73,7 +215,7 @@
         else
         {
             <div class="row">
-            
+
                 <div class="col">
                     <div class="card shadow rounded">
 
@@ -101,15 +243,20 @@
                             <br />
 
                         </div>
-
+                       
                         <div class="card-footer">
-                            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
+                            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { itemType = selectedItemType, fromPrice = queryString["fromPrice"],
+                                                                                                      toPrice = queryString["toPrice"], fromYear = queryString["fromYear"],
+                                                                                                      toYear = queryString["toYear"], fromMileage = queryString["fromMileage"],
+                                                                                                      toMileage = queryString["toMileage"], page = page   
+                            }),
                                                      new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
                                                      {
                                                          DisplayItemSliceAndTotal = false,
                                                          ContainerDivClasses = new[] { "navigation" },
                                                          LiElementClasses = new[] { "page-item" },
-                                                         PageClasses = new[] { "page-link" },
+                                                         PageClasses = new[] { "page-link" }
+                                                         
                                                      })
                         </div>
                     </div>
@@ -130,7 +277,7 @@
 
         });
     </script>
-      
+
     <script>
         function ViewAd(id) {
             window.location.href = '/Home/ViewAdvertisment/' + id;

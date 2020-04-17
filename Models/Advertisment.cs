@@ -30,5 +30,7 @@ namespace AdvertismentPlatform.Models
 
         [NotMapped]
         public Currency? Currency { get; set; }
+
+   
     }
 }

@@ -91,6 +91,7 @@ namespace AdvertismentPlatform
             services.Configure<RecaptchaSettings>(Configuration.GetSection("GoogleRECAPTCHA"));
             services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
             services.AddSingleton<ICurrency, CurrencyContainer>();
+            services.AddSingleton<ICategory, CategoryContainer>();
         }
 
 

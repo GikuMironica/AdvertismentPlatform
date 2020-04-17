@@ -32,5 +32,6 @@ namespace AdvertismentPlatform.Models
 
         [StringLength(7)]
         public int? Mileage { get; set; }
+                
     }
 }

@@ -7,6 +7,6 @@ namespace AdvertismentPlatform.Filter.Base
 {
     public interface ICriteria
     {
-        List<Advertisment> MeetCriteria(List<Advertisment> advertisments);
+        IEnumerable<Advertisment> MeetCriteria(IEnumerable<Advertisment> advertisments);
     }
 }
