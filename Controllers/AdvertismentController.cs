@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AdvertismentPlatform.Domain;
 using AdvertismentPlatform.Models;
 using AdvertismentPlatform.Security;
 using AdvertismentPlatform.Services;
@@ -415,9 +416,9 @@ namespace AdvertismentPlatform.Controllers
             {
                 jsonText = reader.ReadToEnd();
             };            
-            var carModels = JsonConvert.DeserializeObject<List<string>>(jsonText);
+            var carModels = JsonConvert.DeserializeObject<List<CarType>>(jsonText);
 
-            var types = new SelectList(carModels);
+            var types = new SelectList(carModels.Select(m => m.type));
             var renderModel = new CreateCarViewModel();
             renderModel.CarTypes = types;
             renderModel.ProductAge = DateTime.Today;

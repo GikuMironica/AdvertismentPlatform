@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Advertisment>
-
+@inject AdvertismentPlatform.Services.ICartype _carTypeContainer
 @using X.PagedList.Mvc.Core
 @using X.PagedList
 @using Microsoft.AspNetCore.Http
@@ -9,13 +9,15 @@
     var ok = false;
     var queryString = Context.Request.Query;
     var selectedItemType = 0;
+
+    var carTypes = _carTypeContainer.GetTypes();
 }
 <br />
 <br />
 
 <div class="row ">
-                                            
-    @*Left Side*@                           
+
+    @*Left Side*@
     <div class="col-3">
         <div class="card shadow rounded">
 
@@ -31,18 +33,18 @@
 
                         <div class="types shadow">
                             <div class="Categories row text-center">
-                                <label class="col"><i class="fas fa-car-side fa-2x"></i></label>
+                                <label for="carCheck" class="col"><i class="fas fa-car-side fa-2x"></i></label>
 
-                                <label class="col"><i class="fas fa-motorcycle fa-2x"></i></label>
+                                <label for="bikeCheck" class="col"><i class="fas fa-motorcycle fa-2x"></i></label>
                             </div>
                             <div class="Categories row text-center">
                                 <div class="col">
                                     @{ if (queryString["itemType"] == "1") { ok = true; selectedItemType = 1; } else ok = false; }
-                                    <input type="radio" name="itemType" value="1" checked="@ok" />
+                                    <input id="carCheck" onclick="enableItemFilter('radioCar')" type="radio" name="itemType" value="1" checked="@ok" />
                                 </div>
                                 <div class="col">
                                     @{ if (queryString["itemType"] == "2") { ok = true; selectedItemType = 2; } else ok = false; }
-                                    <input type="radio" name="itemType" value="2" checked="@ok" />
+                                    <input id="bikeCheck" onclick="enableItemFilter('radioBike')" type="radio" name="itemType" value="2" checked="@ok" />
                                 </div>
                             </div>
                         </div>
@@ -173,10 +175,37 @@
 
                     </div>
 
-                    <input type="submit" class="btn btn-primary" value="Search" />
+                    <div id="radioCar" class="form-group pl-2 pr-2 pt-2 pb-3 text-center shadow hideable enabled" style="display : none">
+                        <a id="selectedCategories" onclick="toggleInsideFitler('carInsideFilter')" class="dropdown-toggle" style="color:black"
+                           aria-expanded="false">
+                            <b>Car category</b>
+                        </a>
+
+                        <div id="carInsideFilter" style="display : none">
+                            <div class="form-check text-left">
+
+                                @foreach (var cartype in carTypes)
+                                {
+                                    <div class="row">
+                                        <div class="col">
+                                            <input class="form-check-input toBeUnchecked radioCar" name="@cartype.type" value="@cartype.type" checked="checked" type="checkbox" style="width:30px; height:30px;" id="CheckBox_@cartype.type">
+                                            <label class="form-check-label" for="CheckBox_@cartype.type">
+                                                &nbsp;&nbsp;<img src="@cartype.svgPath" style="width: 40px;" asp-append-version="true" />&nbsp;&nbsp;@cartype.type
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Search" 
+                           ./>
                 </form>
                 <p>@{var rez = ((IPagedList)(Model)).TotalItemCount;}@rez results</p>
-                
+
             </div>
 
         </div>
@@ -243,21 +272,32 @@
                             <br />
 
                         </div>
-                       
+
                         <div class="card-footer">
-                            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { itemType = selectedItemType, fromPrice = queryString["fromPrice"],
-                                                                                                      toPrice = queryString["toPrice"], fromYear = queryString["fromYear"],
-                                                                                                      toYear = queryString["toYear"], fromMileage = queryString["fromMileage"],
-                                                                                                      toMileage = queryString["toMileage"], page = page   
-                            }),
-                                                     new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
-                                                     {
-                                                         DisplayItemSliceAndTotal = false,
-                                                         ContainerDivClasses = new[] { "navigation" },
-                                                         LiElementClasses = new[] { "page-item" },
-                                                         PageClasses = new[] { "page-link" }
-                                                         
-                                                     })
+                            @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new
+                       {
+                           itemType = selectedItemType,
+                           fromPrice = queryString["fromPrice"],
+                           toPrice = queryString["toPrice"],
+                           fromYear = queryString["fromYear"],
+                           toYear = queryString["toYear"],
+                           fromMileage = queryString["fromMileage"],
+                           toMileage = queryString["toMileage"],
+                           SUV = queryString["SUV"],
+                           Coupe = queryString["Coupe"],
+                           Hatchback = queryString["Hatchback"],
+                           Saloon = queryString["Saloon"],
+                           Pickup = queryString["Pickup"],
+                           page = page
+                       }),
+                              new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
+                              {
+                                  DisplayItemSliceAndTotal = false,
+                                  ContainerDivClasses = new[] { "navigation" },
+                                  LiElementClasses = new[] { "page-item" },
+                                  PageClasses = new[] { "page-link" }
+
+                              })
                         </div>
                     </div>
                 </div>
@@ -274,8 +314,31 @@
             $('ul.pagination > li.disabled > a').addClass('page-link');
             $('ul.pagination > li.active > span').addClass('bg-dark text-white');
 
-
+            if ($('#carCheck').is(':checked')) {
+                enableItemFilter('radioCar');
+            }
+                
         });
+    </script>
+    <script>
+        function enableItemFilter(idEnable) {
+            $('#' + idEnable).slideDown();
+            $('.hideable').not('#' + idEnable).slideUp();
+            $('.' + 'toBeUnchecked').not('.' + idEnable).prop("checked", false);            
+        }
+
+        
+
+        function toggleInsideFitler(idEnable) {
+            if ($('#' + idEnable).hasClass('enabled')) {
+                $('#' + idEnable).slideUp();
+                $('#' + idEnable).removeClass('enabled');
+            } else {
+                $('#' + idEnable).addClass('enabled');
+                $('#' + idEnable).slideDown();
+            }
+
+        }
     </script>
 
     <script>

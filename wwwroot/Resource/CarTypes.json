@@ -1,13 +1,26 @@
-[  
-  "Saloon",
-  "Coupe",
-  "Hatchback",
-  "Fastback",
-  "GT",
-  "Convertible",
-  "Minivan",
-  "SUV",
-  "CrossOver",
-  "Pickup"
+[
+  {
+    "type": "SUV",
+    "svgPath": "~/svg/SUV.svg"
+  },
+  {
+    "type": "Coupe",
+    "svgPath": "~/svg/Coupe.svg"
+  },
+  {
+    "type": "Hatchback",
+    "svgPath": "~/svg/Hatchback.svg"
+  },
+  {
+    "type": "Minivan",
+    "svgPath": "~/svg/Minivan.svg"
+  },
+  {
+    "type": "Saloon",
+    "svgPath": "~/svg/Saloon.svg"
+  },
+  {
+    "type": "Pickup",
+    "svgPath": "~/svg/Pickup.svg"
+  }
 ]
-

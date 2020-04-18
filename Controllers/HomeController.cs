@@ -16,6 +16,7 @@ using System.ComponentModel.DataAnnotations;
 using AdvertismentPlatform.Attributes;
 using Microsoft.AspNetCore.Http;
 using AdvertismentPlatform.Services;
+using AdvertismentPlatform.Extensions;
 
 namespace AdvertismentPlatform.Controllers
 {
@@ -54,7 +55,8 @@ namespace AdvertismentPlatform.Controllers
         [HttpGet]
         [QueryString(new[] {"itemType","toPrice","fromPrice","fromYear","toYear","fromMileage","toMileage"}, true)]
         [AllowAnonymous]
-        public async Task<IActionResult> Index([FromQuery]int itemType, int? fromPrice, int? toPrice, int? fromYear, int? toYear, int? fromMileage, int? toMileage, int? page)
+        public async Task<IActionResult> Index([FromQuery]int itemType, int? fromPrice, int? toPrice, int? fromYear, int? toYear, int? fromMileage, int? toMileage, 
+                                                          string? SUV, string? Coupe, string? Hatchback, string? Minivan, string? Saloon, string? Pickup, int? page)
         {
             int pageSize = 8;
             var pageNumber = page ?? 1;
@@ -65,8 +67,12 @@ namespace AdvertismentPlatform.Controllers
             if (fromYear > toYear) { var x = fromYear; fromYear = toYear; toYear = x; }
             if (fromMileage > toMileage) { var x = fromMileage; fromMileage = toMileage; toMileage = x; }
 
+            var carTypePreferences = new List<string>();
+            carTypePreferences.AddAllIfNotNull(new List<string>() {SUV, Coupe, Hatchback, Minivan, Saloon, Pickup});
 
-            var ads = await advertismentRepository.GetForPageFormat(category, fromPrice ?? 0, toPrice ?? Int32.MaxValue, fromYear ?? 0, toYear ?? DateTime.UtcNow.Year, fromMileage ?? 0, toMileage ?? Int32.MaxValue, pageSize, pageNumber);
+            var ads = await advertismentRepository.GetForPageFormat(category, fromPrice ?? 0, toPrice ?? Int32.MaxValue
+                                                    , fromYear ?? 0, toYear ?? DateTime.UtcNow.Year 
+                                                    , fromMileage ?? 0, toMileage ?? Int32.MaxValue, carTypePreferences, pageSize, pageNumber);
             return View(ads);
         }
 
