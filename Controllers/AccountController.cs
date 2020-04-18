@@ -275,6 +275,7 @@ namespace AdvertismentPlatform.Controllers
             {
                 if (email != null)
                 {
+                   
                     if (user == null)
                     {
                         user = new ApplicationUser

@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AdvertismentPlatform.Security;
 using AdvertismentPlatform.Services;
+using AdvertismentPlatform.Domain;
 
 namespace AdvertismentPlatform
 {
@@ -91,6 +92,8 @@ namespace AdvertismentPlatform
             services.Configure<RecaptchaSettings>(Configuration.GetSection("GoogleRECAPTCHA"));
             services.AddTransient<IGoogleRecaptchaService, GoogleRecaptchaService>();
             services.AddSingleton<ICurrency, CurrencyContainer>();
+            services.AddSingleton<ICategory, CategoryContainer>();
+            services.AddSingleton<ICartype, CarCategoryContainer>();
         }
 
 
