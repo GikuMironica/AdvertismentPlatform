@@ -78,13 +78,14 @@ namespace AdvertismentPlatform.Models
                         )
                         .OrderByDescending(x => x.PostDate)
                         .ToListAsync();
-            
-            if(itemCategory.GetType().Name == (typeof(AutoItem).Name))
-                return await ads.Where(ad => ad.Item.GetType() == itemCategory.GetType()
-                                        && (((AutoItem)(ad.Item)).Car_Type.EqualsAny(carTypePreferences))).ToPagedListAsync(pageNumber, pageSize);          
-            else if (itemCategory.GetType().Name == (typeof(BikeItem).Name))
-                return await ads.Where(ad => ad.Item.GetType() == itemCategory.GetType()).ToPagedListAsync(pageNumber, pageSize);
-            else
+            if (itemCategory != null)
+            {
+                if (itemCategory.GetType().Name == (typeof(AutoItem).Name))
+                    return await ads.Where(ad => ad.Item.GetType() == itemCategory.GetType()
+                                            && (((AutoItem)(ad.Item)).Car_Type.EqualsAny(carTypePreferences))).ToPagedListAsync(pageNumber, pageSize);
+                else if (itemCategory.GetType().Name == (typeof(BikeItem).Name))
+                    return await ads.Where(ad => ad.Item.GetType() == itemCategory.GetType()).ToPagedListAsync(pageNumber, pageSize);
+            }
             return await ads.ToPagedListAsync(pageNumber, pageSize);
         }
     }

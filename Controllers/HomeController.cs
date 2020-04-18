@@ -53,7 +53,8 @@ namespace AdvertismentPlatform.Controllers
         }
 
         [HttpGet]
-        [QueryString(new[] {"itemType","toPrice","fromPrice","fromYear","toYear","fromMileage","toMileage"}, true)]
+        [QueryString(new[] {"itemType","toPrice","fromPrice","fromMileage","toMileage","SUV","Saloon"}, true)]
+        [QueryString(new[] { "search"}, false)]
         [AllowAnonymous]
         public async Task<IActionResult> Index([FromQuery]int itemType, int? fromPrice, int? toPrice, int? fromYear, int? toYear, int? fromMileage, int? toMileage, 
                                                           string? SUV, string? Coupe, string? Hatchback, string? Minivan, string? Saloon, string? Pickup, int? page)
